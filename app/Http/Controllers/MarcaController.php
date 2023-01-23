@@ -8,6 +8,12 @@ use App\Models\Marca;
 
 class MarcaController extends Controller
 {
+    protected $marca;
+
+    public function __construct(Marca $marca)
+    {
+        $this->marca = $marca;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +21,7 @@ class MarcaController extends Controller
      */
     public function index()
     {
-        $marcas = Marca::all();
+        $marcas = $this->marca->all();
         return $marcas;
     }
 
@@ -35,11 +41,12 @@ class MarcaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Marca  $marca
+     * @param  Integer
      * @return \Illuminate\Http\Response
      */
-    public function show(Marca $marca)
+    public function show($id)
     {
+        $marca = $this->marca->find($id);
         return $marca;
     }
 
@@ -47,11 +54,12 @@ class MarcaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\UpdateMarcaRequest  $request
-     * @param  \App\Models\Marca  $marca
+     * @param  Integer
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateMarcaRequest $request, Marca $marca)
+    public function update(UpdateMarcaRequest $request, $id)
     {
+        $marca = $this->marca->find($id);
         $marca->update($request->all());
         return $marca;
     }
@@ -59,11 +67,12 @@ class MarcaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Marca  $marca
+     * @param  Integer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Marca $marca)
+    public function destroy($id)
     {
+        $marca = $this->marca->find($id);
         $marca->delete();
         return ['msg' => 'Marca removida com sucesso'];
     }
