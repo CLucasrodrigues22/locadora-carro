@@ -18,6 +18,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/', function () {
-    return ['Chegamos aqui' => 'Ok'];
-});
+Route::Apiresource('cliente', 'App\Http\Controllers\ClienteController');
+Route::Apiresource('carro', 'App\Http\Controllers\CarroController');
+Route::Apiresource('locacao', 'App\Http\Controllers\LocacaoController');
+Route::Apiresource('marca', 'App\Http\Controllers\MarcaController');
+Route::Apiresource('modelo', 'App\Http\Controllers\ModeloController');
