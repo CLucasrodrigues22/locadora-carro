@@ -14,7 +14,7 @@ class Marca extends Model
     {
         return [
             'nome' => 'required|unique:marcas,nome,'.$this->id,
-            'imagem' => 'required'
+            'imagem' => 'required|file|mimes:png,jpg,jpeg'
         ];
     }
 
@@ -22,7 +22,8 @@ class Marca extends Model
     {
         return [
             'required' => 'O campo :attribute é obrigatório',
-            'nome.unique' => 'Essa marca já existe em nossa base de dados'
+            'nome.unique' => 'Essa marca já existe em nossa base de dados',
+            'imagem.mimes' => 'Só é permitido imagens no formato PGN, JPG E JPEG.'
         ];
     }
 }
