@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreMarcaRequest;
 use App\Http\Requests\UpdateMarcaRequest;
 use App\Models\Marca;
@@ -95,6 +96,12 @@ class MarcaController extends Controller
             $request->validate($marca->rules(), $marca->feedback());
         }
 
+        // remove imagem antiga caso uma nova foi adicionada
+        if($request->file('imagem'))
+        {
+            Storage::disk('public')->delete($marca->imagem);
+        }
+
         $imagem = $request->file('imagem');
         $imagem_urn = $imagem->store('imagens/marcas', 'public');
 
@@ -102,7 +109,7 @@ class MarcaController extends Controller
             'nome' => $request->nome,
             'imagem' => $imagem_urn
         ]);
-        
+
         return response()->json($marca, 200);
     }
 
@@ -119,6 +126,10 @@ class MarcaController extends Controller
         {
             return response()->json(['msg' => 'Erro ao deletar, marca não existe em nosso banco'], 404);
         }
+
+        // remove imagem antiga caso ele exista
+        Storage::disk('public')->delete($marca->imagem);
+
         $marca->delete();
         return response()->json(['msg' => 'Marca removida com sucesso'], 200);
     }
