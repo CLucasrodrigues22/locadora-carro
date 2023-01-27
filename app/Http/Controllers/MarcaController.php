@@ -58,7 +58,7 @@ class MarcaController extends Controller
         $marca = $this->marca->find($id);
         if($marca === null)
         {
-            return response()->json(['erro' => 'Recurso pesquisado não existe'], 404);
+            return response()->json(['erro' => 'Marca pesquisada não existe'], 404);
         }
         return response()->json($marca, 200);
     }
