@@ -75,7 +75,7 @@ class ModeloController extends Controller
      */
     public function update(UpdateModeloRequest $request, $id)
     {
-        $modelo = $this->modelo->find($id);
+        $modelo = $this->modelo->with('marca')->find($id);
         if ($modelo === null) {
             return response()->json(['erro' => 'Modelo não existe'], 404);
         }

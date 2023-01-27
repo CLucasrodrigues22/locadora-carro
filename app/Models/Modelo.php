@@ -23,4 +23,10 @@ class Modelo extends Model
             'abs' => 'required|boolean' // True, False, 1, 0, '1', '0'
         ];
     }
+
+    public function modelos()
+    {
+        // Uma marca possui muitos modelos
+        return $this->belongsTo('App\Models\Marca');
+    }
 }

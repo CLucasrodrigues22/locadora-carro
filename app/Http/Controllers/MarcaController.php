@@ -72,7 +72,7 @@ class MarcaController extends Controller
      */
     public function update(UpdateMarcaRequest $request, $id)
     {
-        $marca = $this->marca->find($id);
+        $marca = $this->marca->with('model')->find($id);
         if($marca === null)
         {
             return response()->json(['erro' => 'Marca não existe'], 404);

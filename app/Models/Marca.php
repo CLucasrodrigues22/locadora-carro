@@ -18,6 +18,12 @@ class Marca extends Model
         ];
     }
 
+    public function marca()
+    {   
+        // Um modelo Pertence a Uma marca
+        return $this->hasMany('App\Models\Modelo');
+    }
+
     public function feedback()
     {
         return [
