@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreClienteRequest;
 use App\Http\Requests\UpdateClienteRequest;
 use App\Models\Cliente;
+use GuzzleHttp\Client;
 
 class ClienteController extends Controller
 {
+
+    protected $cliente;
+
+    public function __construct(Cliente $cliente)
+    {
+        $this->cliente = $cliente;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,17 +23,9 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $cliente = $this->cliente->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return response()->json($cliente, 200);
     }
 
     /**
@@ -36,7 +36,12 @@ class ClienteController extends Controller
      */
     public function store(StoreClienteRequest $request)
     {
-        return 'Ok';
+        $request->validate($this->cliente->rules(), $this->cliente->feedback());
+        $cliente = Cliente::create([
+            'nome' => $request->nome
+        ]);
+
+        return response()->json($request, 201);
     }
 
     /**
@@ -46,17 +51,6 @@ class ClienteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Cliente $cliente)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Cliente  $cliente
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Cliente $cliente)
     {
         //
     }
