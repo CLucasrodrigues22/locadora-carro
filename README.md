@@ -7,3 +7,8 @@
 ![GitHub forks](https://img.shields.io/github/forks/iuricode/README-template?style=for-the-badge)
 
 > Projeto em desenvolvimento.
+
+- composer update
+- php artisan storage:link
+- php artisan migrate
+- php artisan serve

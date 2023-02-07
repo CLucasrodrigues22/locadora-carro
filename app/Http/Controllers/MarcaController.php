@@ -7,10 +7,13 @@ use App\Http\Requests\StoreMarcaRequest;
 use App\Http\Requests\UpdateMarcaRequest;
 use App\Models\Marca;
 use Illuminate\Http\Request;
+use App\Repositories\MarcaRepository;
 
 class MarcaController extends Controller
 {
     protected $marca;
+
+    //$marcaRepository = new MarcaRepository($this->marca);
 
     public function __construct(Marca $marca)
     {
