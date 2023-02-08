@@ -7,6 +7,7 @@ use App\Http\Requests\StoreModeloRequest;
 use App\Http\Requests\UpdateModeloRequest;
 use App\Models\Modelo;
 use Illuminate\Http\Request;
+use App\Repositories\ModeloRepository;
 
 class ModeloController extends Controller
 {
@@ -25,34 +26,27 @@ class ModeloController extends Controller
      */
     public function index(Request $request)
     {
-        $modelos = array();
+        $modeloRepository = new ModeloRepository($this->modelo);
 
-        // condição caso exista o atributo atributos_marca na url
+        // condição caso exista o atributo atributos_modelo na url
         if ($request->has('atributos_marca')) {
-            $atributos_marca = $request->atributos_marca;
-            $modelos = $this->modelo->with('marca:id,' . $atributos_marca);
+            $atributos_marca = 'marca:id,' . $request->atributos_marca;
+            $modeloRepository->selectAtributosRegistrosRelacionados($atributos_marca);
         } else {
-            $modelos = $this->modelo->with('marca');
+            $modeloRepository->selectAtributosRegistrosRelacionados('marca');
         }
 
-        // filtro
+        // filtro multiplo
         if ($request->has('filtro')) {
-            $filtros = explode(';', $request->filtro);
-            foreach($filtros as $key => $condicao) {
-                $c = explode(':', $condicao);
-                $modelos = $modelos->where($c[0], $c[1], $c[2]);
-            }
+            $modeloRepository->filtro($request->filtro);
         }
 
         // condição caso exista o atributo atributos na url
         if ($request->has('atributos')) {
-            $atributos = $request->atributos;
-            $modelos = $modelos->selectRaw($atributos)->get();
-        } else {
-            $modelos = $this->modelo->get();
+            $modeloRepository->selectAtributos($request->atributos);
         }
-        //return response()->json($this->modelo->with('marca')->get(), 200);
-        return response()->json($modelos, 200);
+
+        return response()->json($modeloRepository->getResultado(), 200);
     }
 
     /**
@@ -106,31 +100,30 @@ class ModeloController extends Controller
     {
         $modelo = $this->modelo->find($id);
 
-        if($modelo === null) {
+        if ($modelo === null) {
             return response()->json(['erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
         }
 
-        if($request->method() === 'PATCH') {
+        if ($request->method() === 'PATCH') {
 
             $regrasDinamicas = array();
 
             //percorrendo todas as regras definidas no Model
-            foreach($modelo->rules() as $input => $regra) {
-                
+            foreach ($modelo->rules() as $input => $regra) {
+
                 //coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
-                if(array_key_exists($input, $request->all())) {
+                if (array_key_exists($input, $request->all())) {
                     $regrasDinamicas[$input] = $regra;
                 }
             }
-            
-            $request->validate($regrasDinamicas);
 
+            $request->validate($regrasDinamicas);
         } else {
             $request->validate($modelo->rules());
         }
         // remove o arquivo antigo caso um novo arquivo tenha sido enviado no request
 
-        if($request->file('imagem') != null) {
+        if ($request->file('imagem') != null) {
             // Deleta a imagem atual
             Storage::disk('public')->delete($modelo->imagem);
             // salvando caminho da nova imagem ao objeto $modelo
