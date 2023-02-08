@@ -47,34 +47,75 @@ class ClienteController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Cliente  $cliente
+     * @param  Integer
      * @return \Illuminate\Http\Response
      */
-    public function show(Cliente $cliente)
+    public function show($id)
     {
-        //
+        $cliente = $this->cliente->find($id);
+        if($cliente === null) {
+            return response()->json(['erro' => 'Cliente pesquisado não existe'], 404);
+        }
+
+        return response()->json($cliente, 200);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateClienteRequest  $request
-     * @param  \App\Models\Cliente  $cliente
+     * @param  \App\Http\Requests\UpdateMarcaRequest  $request
+     * @param  Integer
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateClienteRequest $request, Cliente $cliente)
+    public function update(UpdateClienteRequest $request, $id)
     {
-        //
+        $cliente = $this->cliente->find($id);
+
+        if($cliente === null) {
+            return response()->json(['erro' => 'Impossível realizar a atualização. O cliente solicitado não existe'], 404);
+        }
+
+        if($request->method() === 'PATCH') {
+            
+            $regrasDinamicas = array();
+
+            //percorrendo todas as regras definidas no Model
+            foreach($cliente->rules() as $input => $regra) {
+                
+                //coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
+                if(array_key_exists($input, $request->all())) {
+                    $regrasDinamicas[$input] = $regra;
+                }
+            }
+            
+            $request->validate($regrasDinamicas, $cliente->feedback());
+        } else {
+            $request->validate($cliente->rules(), $cliente->feedback());
+        }
+
+        $cliente->fill($request->all());
+
+        // salvando dados
+        $cliente->save();
+
+        return response()->json($cliente, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Cliente  $cliente
+     * @param  Integer
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cliente $cliente)
+    public function destroy($id)
     {
-        //
+        $cliente = $this->cliente->find($id);
+
+        if($cliente === null) {
+            return response()->json(['msg' => 'Erro ao deletar, cliente não existe em nosso banco'], 404);
+        }
+
+        $cliente->delete();
+        return response()->json(['msg' => 'Cliente removido com sucesso'], 200);
     }
 }
