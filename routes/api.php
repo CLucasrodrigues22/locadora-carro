@@ -19,11 +19,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Rotas de autenticação
-Route::get('/users', [App\Http\Controllers\AuthController::class, 'showUsers']);
 Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
 
-
+// Rotas privadas
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::Apiresource('cliente', 'App\Http\Controllers\ClienteController');
     Route::Apiresource('carro', 'App\Http\Controllers\CarroController');
