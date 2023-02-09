@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Rotas de autenticação
 Route::get('/users', [App\Http\Controllers\AuthController::class, 'showUsers']);
 Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
+Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
@@ -29,4 +30,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::Apiresource('locacao', 'App\Http\Controllers\LocacaoController');
     Route::Apiresource('marca', 'App\Http\Controllers\MarcaController');
     Route::Apiresource('modelo', 'App\Http\Controllers\ModeloController');
+    Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
 });
