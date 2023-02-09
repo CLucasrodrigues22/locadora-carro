@@ -41,4 +41,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Validações de campos e feedbacks
+     */
+
+    public function rules() {
+        return [
+            'name' => 'required|string',
+            'email' => 'unique:users,email|required',
+            'password' => 'required'
+        ];
+    }
+    
+    public function feedback() {
+        return [
+            'unique' => 'Já existe um usuário com este e-mail cadastrado',
+            'required' => 'O campo :attribute é obrigatório'
+        ];
+    }
 }

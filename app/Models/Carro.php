@@ -21,6 +21,7 @@ class Carro extends Model
     
     public function feedback() {
         return [
+            'exists' => 'Não existe nenhum modelo cadastrado com o ID informado',
             'unique' => 'Já existe um modelo cadastrado com essa placa',
             'required' => 'O campo :attribute é obrigatório'
         ];
