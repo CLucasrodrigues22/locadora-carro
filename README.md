@@ -11,4 +11,7 @@
 - composer update
 - php artisan storage:link
 - php artisan migrate
+- composer require laravel/ui
+- php artisan ui vue --auth
+- npm install && npm run dev
 - php artisan serve
