@@ -14,4 +14,5 @@ Repositório do Back-end, que será consumido pelo front-end [Locadora-Front](ht
 - php artisan storage:link
 - php artisan migrate
 - php artisan jwt:secret
+- npm install && npm run dev
 - php artisan serve
