@@ -44,6 +44,10 @@
             </div>
         </div>
         <modal-component id="modalMarca" titulo="Cadastro de Marca">
+            <template v-slot:alerta>
+                <alert-component classe="success" :feedback="feedbackMessage" conteudo="Marca cadastrada com sucesso." v-if="this.feedbackStatus == 'sucesso'"></alert-component>
+                <alert-component classe="danger" :feedback="feedbackMessage" conteudo="Ocorreu o(s) seguinte(s) erro(s) ao cadastrar a nova Marca: " v-if="this.feedbackStatus == 'erro'"></alert-component>
+            </template>
             <template v-slot:conteudo>
                 <div class="form-group">
                     <input-container-component titulo="Nome da Marca" id="novaMarca" id-help="novaMarcaHelp"
@@ -66,11 +70,29 @@
 
 <script>
     export default {
+        computed: {
+                token() {
+                    // separar o objeto cookie atravez do ; para resgatar o atributo token
+                    let token = document.cookie.split(';').find(indice => {
+                        return indice.startsWith('token=');
+
+                        // separando o atributo token pelo "=" para resgatar apenas o valor do mesmo
+                        token = token.split('=')[1];
+                        token = 'Bearer ' + token;
+
+                        return token
+                    });
+                }
+        },
         data() {
             return {
                 urlBase: 'http://127.0.0.1:8000/api/v1/marca',
                 novaMarca: '',
-                imagemMarca: []
+                imagemMarca: [],
+                feedbackStatus: '',
+                feedbackMessage: [
+
+                ]
             }
         },
         methods: {
@@ -88,17 +110,22 @@
                 let cfg = {
                     headres: {
                         'Content-Type': 'multipart/form-data',
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'Authorization': this.token
                     }
                 }
 
                 // enviando atributos para a requisição post para que seja salvo no back-end
                 axios.post(this.urlBase, formData, cfg)
                     .then(response => {
+                        this.feedbackStatus = 'sucesso'
+                        this.feedbackMessage = response
                         console.log(response)
                     })
                     .catch(errors => {
-                        console.log(errors)
+                        this.feedbackStatus = 'erro'
+                        this.feedbackMessage = errors.response
+                        console.log(errors.response.data.message)
                     })
             }
         }

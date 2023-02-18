@@ -5,6 +5,7 @@
  */
 
 import './bootstrap';
+import swal from 'sweetalert';
 import { createApp } from 'vue';
 
 /**
@@ -22,6 +23,7 @@ import InputContainer from './components/InputContainer.vue';
 import Table from './components/Table.vue';
 import Card from './components/Card.vue';
 import Modal from './components/Modal.vue';
+import Alert from './components/Alert.vue';
 // ------ Marcas ------- //
 import MarcaIndex from './components/Marcas/MarcaIndex.vue';
 
@@ -32,6 +34,7 @@ app.component('input-container-component', InputContainer);
 app.component('table-component', Table);
 app.component('card-component', Card);
 app.component('modal-component', Modal);
+app.component('alert-component', Alert);
 // ------ Marcas ------- //
 app.component('marcaindex-component', MarcaIndex);
 
