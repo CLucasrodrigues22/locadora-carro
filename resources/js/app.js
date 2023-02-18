@@ -15,15 +15,23 @@ import { createApp } from 'vue';
 
 const app = createApp({});
 
-// importar componentes
+// importar componentes globais
 import Login from './components/Login.vue';
 import Home from './components/Home.vue';
+import InputContainer from './components/InputContainer.vue';
+import Table from './components/Table.vue';
+import Card from './components/Card.vue';
+import Modal from './components/Modal.vue';
 // ------ Marcas ------- //
 import MarcaIndex from './components/Marcas/MarcaIndex.vue';
 
-// servir componentes
+// servir componentes globais
 app.component('login-component', Login);
 app.component('home-component', Home);
+app.component('input-container-component', InputContainer);
+app.component('table-component', Table);
+app.component('card-component', Card);
+app.component('modal-component', Modal);
 // ------ Marcas ------- //
 app.component('marcaindex-component', MarcaIndex);
 

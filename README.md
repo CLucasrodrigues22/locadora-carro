@@ -8,8 +8,6 @@
 
 > Projeto em desenvolvimento.
 
-Repositório do Back-end, que será consumido pelo front-end [Locadora-Front](https://github.com/CLucasrodrigues22/locadora-front)
-
 - composer update
 - php artisan storage:link
 - php artisan migrate
