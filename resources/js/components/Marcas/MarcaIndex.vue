@@ -32,7 +32,10 @@
                 <!-- Card de Listagem de marca -->
                 <card-component titulo="Relação de Marcas">
                     <template v-slot:conteudo>
-                        <table-component></table-component>
+                        <table-component 
+                            :dados="marcas"
+                            :titulos="['ID', 'Imagem', 'Nome']"
+                        ></table-component>
                     </template>
 
                     <template v-slot:rodape>
@@ -90,12 +93,21 @@
                 novaMarca: '',
                 imagemMarca: [],
                 feedbackStatus: '',
-                feedbackMessage: [
-
-                ]
+                feedbackMessage: [],
+                marcas: []
             }
         },
         methods: {
+            carregarMarcas() {
+                axios.get(this.urlBase)
+                    .then(response => {
+                        this.marcas = response.data
+                        console.log(this.marcas)
+                    })
+                    .catch(errors => {
+                        console.log(errors)
+                    })
+            },
             carregarImagem(e) {
                 this.imagemMarca = e.target.files
             },
@@ -120,14 +132,15 @@
                     .then(response => {
                         this.feedbackStatus = 'sucesso'
                         this.feedbackMessage = response
-                        console.log(response)
                     })
                     .catch(errors => {
                         this.feedbackStatus = 'erro'
                         this.feedbackMessage = errors.response
-                        console.log(errors.response.data.message)
                     })
             }
+        },
+        mounted() {
+            this.carregarMarcas()
         }
     }
 </script>
