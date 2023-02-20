@@ -34,7 +34,11 @@
                     <template v-slot:conteudo>
                         <table-component 
                             :dados="marcas"
-                            :titulos="['ID', 'Imagem', 'Nome']"
+                            :titulos="{
+                                id: {titulo: 'ID', tipo: 'texto'},
+                                nome: {titulo: 'Nome', tipo: 'texto'},
+                                imagem: {titulo: 'Imagem', tipo: 'imagem'},
+                            }"
                         ></table-component>
                     </template>
 
@@ -102,7 +106,7 @@
                 axios.get(this.urlBase)
                     .then(response => {
                         this.marcas = response.data
-                        console.log(this.marcas)
+                        //console.log(this.marcas)
                     })
                     .catch(errors => {
                         console.log(errors)
@@ -112,7 +116,7 @@
                 this.imagemMarca = e.target.files
             },
             salvar() {
-                console.log(this.novaMarca, this.imagemMarca[0])
+                //console.log(this.novaMarca, this.imagemMarca[0])
                 // instanciando um formulário para definir os atributos
                 let formData = new FormData();
                 formData.append('nome', this.novaMarca);

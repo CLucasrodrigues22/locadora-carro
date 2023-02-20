@@ -1,40 +1,22 @@
 <template>
     <div>
-        <table class="table text-center justify-content-center">
+        <table class="table table-hover text-center">
             <thead>
                 <tr>
-                    <th v-for="t, key in titulos" :key="key" class="text-uppercase">{{ t }}</th>
+                    <th v-for="t, key in titulos" :key="key">{{t.titulo}}</th>
                 </tr>
             </thead>
-            <tbody class="table-border-bottom-0">
-                <tr v-for="obj in dados" :key="obj.id">
-                   <template v-for="valor, chave in obj">
-                        <td v-if="titulos.includes(chave)" :key="chave">
-                            {{ chave }}
-                        </td>
-                   </template>
-                    <!-- <td>{{ m.id }}</td>
-                    <td class="text-center">
-                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center"
-                            style="padding-left: 29%;padding-right: 29%;">
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                class="avatar avatar-xs pull-up" title="" data-bs-original-title="Lucas">
-                                <img :src="'/storage/'+m.imagem" alt="Avatar" class="rounded-circle" style="width: 50%;">
-                            </li>
-                        </ul>
+            <tbody>
+                <tr v-for="obj, chave in dadosFiltrados" :key="chave">
+                    <td v-for="valor, chaveValor in obj" :key="chaveValor">
+                        <span v-if="titulos[chaveValor].tipo == 'texto'">{{valor}}</span>
+                        <span v-if="titulos[chaveValor].tipo == 'data'">
+                            {{ '...'+valor}}
+                        </span>
+                        <span v-if="titulos[chaveValor].tipo == 'imagem'">
+                            <img :src="'/storage/'+valor" width="50" height="50">
+                        </span>
                     </td>
-                    <td>{{ m.nome }}</td> -->
-                    <!-- <td>
-                        <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="/showuser?id=1"><i class="bx bx-edit-alt me-1"></i>
-                                    Editar</a>
-                            </div>
-                        </div>
-                    </td> -->
                 </tr>
             </tbody>
         </table>
@@ -42,10 +24,30 @@
 </template>
 
 <script>
-export default {
-    props: [
-        'dados',
-        'titulos'
-    ]
-}
+    export default {
+        props: ['dados', 'titulos'],
+        computed: {
+            // filtrar dados de acorda com os metadados recebidos no bind :titulos
+            dadosFiltrados() {
+                
+                // resgata cada atributo da props "dados"
+                let campos = Object.keys(this.titulos)
+                // array a ser preenchido com cada objeto
+                let dadosFiltrados = []
+
+                // percorrar o array atribuido a props 'dados'
+                this.dados.map((item, chave) => {
+
+                    let itemFiltrado = {}
+                    campos.forEach(campo => {
+                        
+                        itemFiltrado[campo] = item[campo] //utilizar a sintaxe de array para atribuir valores a objetos
+                    })
+                    dadosFiltrados.push(itemFiltrado)
+                })
+
+                return dadosFiltrados //retorne um array de objetos 
+            }
+        }
+    }
 </script>

@@ -37,31 +37,12 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  Marcas
+                  Veiculos
                 </a>
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="{{ route('marcas') }}">Lista de Marcas</a></li>
-                  <li><a class="dropdown-item" href="/marcacreate">Cadastrar Marcas</a></li>
-                </ul>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                  aria-expanded="false">
-                  Modelos
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="/modelo">Lista de Modelos</a></li>
-                  <li><a class="dropdown-item" href="/createmodelo">Cadastrar Modelos</a></li>
-                </ul>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                  aria-expanded="false">
-                  Clientes
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="/cliente">Lista de Clientes</a></li>
-                  <li><a class="dropdown-item" href="/createcliente">Cadastrar Cliente</a></li>
+                  <li><a class="dropdown-item" href="#">Lista de Modelos</a></li>
+                  <li><a class="dropdown-item" href="#">Lista de Carros</a></li>
                 </ul>
               </li>
               <li class="nav-item dropdown">
@@ -71,17 +52,7 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="/locacao">Lista de Locações</a></li>
-                  <li><a class="dropdown-item" href="#">Cadastrar Locação</a></li>
-                </ul>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                  aria-expanded="false">
-                  Carros
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="/marca">Lista de Carros</a></li>
-                  <li><a class="dropdown-item" href="#">Cadastrar Carro</a></li>
+                  <li><a class="dropdown-item" href="#">Lista de Clientes</a></li>
                 </ul>
               </li>
             </ul>
