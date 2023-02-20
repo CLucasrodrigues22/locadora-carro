@@ -32,19 +32,27 @@
                 <!-- Card de Listagem de marca -->
                 <card-component titulo="Relação de Marcas">
                     <template v-slot:conteudo>
-                        <table-component 
-                            :dados="marcas"
-                            :titulos="{
-                                id: {titulo: 'ID', tipo: 'texto'},
-                                nome: {titulo: 'Nome', tipo: 'texto'},
-                                imagem: {titulo: 'Imagem', tipo: 'imagem'},
-                            }"
-                        ></table-component>
+                        <table-component :dados="marcas.data" :titulos="{
+                            id: { titulo: 'ID', tipo: 'texto' },
+                            nome: { titulo: 'Nome', tipo: 'texto' },
+                            imagem: { titulo: 'Imagem', tipo: 'imagem' },
+                        }"></table-component>
                     </template>
 
                     <template v-slot:rodape>
-                        <button type="button" class="btn btn-primary btn-sm float-left" data-bs-toggle="modal"
-                            data-bs-target="#modalMarca">Adicionar</button>
+                        <div class="row">
+                            <div class="col-10">
+                                <pagination-component>
+                                    <li :class="li.active ? 'page-item active' : 'page-item'" v-for="li, key in marcas.links" :key="key" @click="paginacao(li)">
+                                        <a class="page-link" v-html="li.label"></a>
+                                    </li>
+                                </pagination-component>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal"
+                                    data-bs-target="#modalMarca">Adicionar</button>
+                            </div>
+                        </div>
                     </template>
                 </card-component>
                 <!-- Fim do Card de Listagem de marca -->
@@ -52,18 +60,23 @@
         </div>
         <modal-component id="modalMarca" titulo="Cadastro de Marca">
             <template v-slot:alerta>
-                <alert-component classe="success" :feedback="feedbackMessage" conteudo="Marca cadastrada com sucesso." v-if="this.feedbackStatus == 'sucesso'"></alert-component>
-                <alert-component classe="danger" :feedback="feedbackMessage" conteudo="Ocorreu o(s) seguinte(s) erro(s) ao cadastrar a nova Marca: " v-if="this.feedbackStatus == 'erro'"></alert-component>
+                <alert-component classe="success" :feedback="feedbackMessage" conteudo="Marca cadastrada com sucesso."
+                    v-if="this.feedbackStatus == 'sucesso'"></alert-component>
+                <alert-component classe="danger" :feedback="feedbackMessage"
+                    conteudo="Ocorreu o(s) seguinte(s) erro(s) ao cadastrar a nova Marca: "
+                    v-if="this.feedbackStatus == 'erro'"></alert-component>
             </template>
             <template v-slot:conteudo>
                 <div class="form-group">
                     <input-container-component titulo="Nome da Marca" id="novaMarca" id-help="novaMarcaHelp"
                         texto-ajuda="(Obrigatório) Informe o nome da marca">
-                        <input type="text" class="form-control" id="novoNome" aria-describedby="novoNomeHelp" placeholder="Nome da marca" v-model="novaMarca" required>
+                        <input type="text" class="form-control" id="novoNome" aria-describedby="novoNomeHelp"
+                            placeholder="Nome da marca" v-model="novaMarca" required>
                     </input-container-component>
-                    <input-container-component titulo="Imagem da Marca" id="novaImagem" name="novaImagem" id-help="imagemHelp"
-                        texto-ajuda="(Obrigatório) Selecione a imagem da Marca">
-                        <input type="file" class="form-control" id="novaImagem" aria-describedby="imagemHelp" @change="carregarImagem($event)" required>
+                    <input-container-component titulo="Imagem da Marca" id="novaImagem" name="novaImagem"
+                        id-help="imagemHelp" texto-ajuda="(Obrigatório) Selecione a imagem da Marca">
+                        <input type="file" class="form-control" id="novaImagem" aria-describedby="imagemHelp"
+                            @change="carregarImagem($event)" required>
                     </input-container-component>
                 </div>
             </template>
@@ -76,75 +89,83 @@
 </template>
 
 <script>
-    export default {
-        computed: {
-                token() {
-                    // separar o objeto cookie atravez do ; para resgatar o atributo token
-                    let token = document.cookie.split(';').find(indice => {
-                        return indice.startsWith('token=');
+export default {
+    computed: {
+        token() {
+            // separar o objeto cookie atravez do ; para resgatar o atributo token
+            let token = document.cookie.split(';').find(indice => {
+                return indice.startsWith('token=');
 
-                        // separando o atributo token pelo "=" para resgatar apenas o valor do mesmo
-                        token = token.split('=')[1];
-                        token = 'Bearer ' + token;
+                // separando o atributo token pelo "=" para resgatar apenas o valor do mesmo
+                token = token.split('=')[1];
+                token = 'Bearer ' + token;
 
-                        return token
-                    });
-                }
-        },
-        data() {
-            return {
-                urlBase: 'http://127.0.0.1:8000/api/v1/marca',
-                novaMarca: '',
-                imagemMarca: [],
-                feedbackStatus: '',
-                feedbackMessage: [],
-                marcas: []
-            }
-        },
-        methods: {
-            carregarMarcas() {
-                axios.get(this.urlBase)
-                    .then(response => {
-                        this.marcas = response.data
-                        //console.log(this.marcas)
-                    })
-                    .catch(errors => {
-                        console.log(errors)
-                    })
-            },
-            carregarImagem(e) {
-                this.imagemMarca = e.target.files
-            },
-            salvar() {
-                //console.log(this.novaMarca, this.imagemMarca[0])
-                // instanciando um formulário para definir os atributos
-                let formData = new FormData();
-                formData.append('nome', this.novaMarca);
-                formData.append('imagem', this.imagemMarca[0]);
-
-                // cabeçalhos da requisição
-                let cfg = {
-                    headres: {
-                        'Content-Type': 'multipart/form-data',
-                        'Accept': 'application/json',
-                        'Authorization': this.token
-                    }
-                }
-
-                // enviando atributos para a requisição post para que seja salvo no back-end
-                axios.post(this.urlBase, formData, cfg)
-                    .then(response => {
-                        this.feedbackStatus = 'sucesso'
-                        this.feedbackMessage = response
-                    })
-                    .catch(errors => {
-                        this.feedbackStatus = 'erro'
-                        this.feedbackMessage = errors.response
-                    })
-            }
-        },
-        mounted() {
-            this.carregarMarcas()
+                return token
+            });
         }
+    },
+    data() {
+        return {
+            urlBase: 'http://127.0.0.1:8000/api/v1/marca',
+            novaMarca: '',
+            imagemMarca: [],
+            feedbackStatus: '',
+            feedbackMessage: [],
+            marcas: {
+                data: []
+            }
+        }
+    },
+    methods: {
+        paginacao(li) {
+            if(li.url) { 
+                this.urlBase = li.url // ajustando a url de consulta com o parâmetro de página
+                this.carregarMarcas() // requisitando novamente os dados para nossa API com base na URL atualizada
+            }
+        },
+        carregarMarcas() {
+            axios.get(this.urlBase)
+                .then(response => {
+                    this.marcas = response.data
+                    //console.log(this.marcas)
+                })
+                .catch(errors => {
+                    console.log(errors)
+                })
+        },
+        carregarImagem(e) {
+            this.imagemMarca = e.target.files
+        },
+        salvar() {
+            //console.log(this.novaMarca, this.imagemMarca[0])
+            // instanciando um formulário para definir os atributos
+            let formData = new FormData();
+            formData.append('nome', this.novaMarca);
+            formData.append('imagem', this.imagemMarca[0]);
+
+            // cabeçalhos da requisição
+            let cfg = {
+                headres: {
+                    'Content-Type': 'multipart/form-data',
+                    'Accept': 'application/json',
+                    'Authorization': this.token
+                }
+            }
+
+            // enviando atributos para a requisição post para que seja salvo no back-end
+            axios.post(this.urlBase, formData, cfg)
+                .then(response => {
+                    this.feedbackStatus = 'sucesso'
+                    this.feedbackMessage = response
+                })
+                .catch(errors => {
+                    this.feedbackStatus = 'erro'
+                    this.feedbackMessage = errors.response
+                })
+        }
+    },
+    mounted() {
+        this.carregarMarcas()
     }
+}
 </script>

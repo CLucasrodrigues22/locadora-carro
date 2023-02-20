@@ -5,6 +5,7 @@
  */
 
 import './bootstrap';
+import '../css/app.css';
 import swal from 'sweetalert';
 import { createApp } from 'vue';
 
@@ -24,6 +25,7 @@ import Table from './components/Table.vue';
 import Card from './components/Card.vue';
 import Modal from './components/Modal.vue';
 import Alert from './components/Alert.vue';
+import Pagination from './components/Pagination.vue';
 // ------ Marcas ------- //
 import MarcaIndex from './components/Marcas/MarcaIndex.vue';
 
@@ -35,6 +37,7 @@ app.component('table-component', Table);
 app.component('card-component', Card);
 app.component('modal-component', Modal);
 app.component('alert-component', Alert);
+app.component('pagination-component', Pagination);
 // ------ Marcas ------- //
 app.component('marcaindex-component', MarcaIndex);
 
