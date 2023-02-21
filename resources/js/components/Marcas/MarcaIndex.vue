@@ -10,21 +10,21 @@
                                 <input-container-component titulo="ID" id="inputId" id-help="idHelp"
                                     texto-ajuda="(Opcional) Informe o ID da marca">
                                     <input type="number" class="form-control" id="inputId" aria-describedby="idHelp"
-                                        placeholder="ID">
+                                        placeholder="ID" v-model="busca.id">
                                 </input-container-component>
                             </div>
                             <div class="col mb-3">
                                 <input-container-component titulo="Nome da Marca" id="inputNome" id-help="nomeHelp"
                                     texto-ajuda="(Opcional) Informe o nome da marca">
                                     <input type="text" class="form-control" id="inputNome" aria-describedby="nomeHelp"
-                                        placeholder="Nome da Marca">
+                                        placeholder="Nome da Marca" v-model="busca.nome">
                                 </input-container-component>
                             </div>
                         </div>
                     </template>
 
                     <template v-slot:rodape>
-                        <button type="submit" class="btn btn-primary btn-sm float-left">Pesquisar</button>
+                        <button type="submit" class="btn btn-primary btn-sm float-left" @click="pesquisar()">Pesquisar</button>
                     </template>
                 </card-component>
                 <!-- Fim do card de busca de marca -->
@@ -49,7 +49,7 @@
                                 </pagination-component>
                             </div>
                             <div class="col-2">
-                                <button type="button" class="btn btn-primary btn-sm float-right" data-bs-toggle="modal"
+                                <button type="button" class="btn btn-primary btn-sm adicionar" data-bs-toggle="modal"
                                     data-bs-target="#modalMarca">Adicionar</button>
                             </div>
                         </div>
@@ -107,24 +107,48 @@ export default {
     data() {
         return {
             urlBase: 'http://127.0.0.1:8000/api/v1/marca',
+            urlPaginacao: '',
+            urlFiltro: '',
             novaMarca: '',
             imagemMarca: [],
             feedbackStatus: '',
             feedbackMessage: [],
             marcas: {
                 data: []
-            }
+            },
+            busca: { id: '', nome: '' }
         }
     },
     methods: {
+        pesquisar() {
+            let filtro = ''
+
+            for(let chave in this.busca) {
+                if(this.busca[chave]) {
+                    if(filtro != '') {
+                        filtro += ";"
+                    }
+
+                    filtro += chave + ':like:' + this.busca[chave];
+                }
+            }
+            if(filtro != '') {
+                this.urlPaginacao = 'page=1';
+                this.urlFiltro = '&filtro='+filtro;
+            } else {
+                this.urlFiltro = ''
+            }
+            this.carregarMarcas()
+        },
         paginacao(li) {
             if(li.url) { 
-                this.urlBase = li.url // ajustando a url de consulta com o parâmetro de página
+                this.urlPaginacao = li.url.split('?')[1];
                 this.carregarMarcas() // requisitando novamente os dados para nossa API com base na URL atualizada
             }
         },
         carregarMarcas() {
-            axios.get(this.urlBase)
+            let url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro;
+            axios.get(url)
                 .then(response => {
                     this.marcas = response.data
                     //console.log(this.marcas)
@@ -147,8 +171,9 @@ export default {
             let cfg = {
                 headres: {
                     'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json',
+                    'Accept':'application/json',
                     'Authorization': this.token
+
                 }
             }
 
