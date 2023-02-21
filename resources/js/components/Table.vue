@@ -4,6 +4,7 @@
             <thead>
                 <tr>
                     <th v-for="t, key in titulos" :key="key">{{t.titulo}}</th>
+                    <th v-if="visualizar.visivel || editar || deletar">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -17,6 +18,11 @@
                             <img :src="'/storage/'+valor" width="50" height="50">
                         </span>
                     </td>
+                    <td v-if="visualizar.visivel || editar || deletar"> 
+                        <button v-if="visualizar.visivel" class="btn btn btn-primary btn-sm m-1" title="Visualizar" :data-bs-toggle="visualizar.dataToggle" :data-bs-target="visualizar.dataTarget"><i class="bi bi-eye"></i></button>
+                        <button v-if="editar" class="btn btn btn-warning btn-sm m-1" title="Editar"><i class="bi bi-pencil"></i></button>
+                        <button v-if="deletar" class="btn btn btn-danger btn-sm m-1" title="Deletar"><i class="bi bi-trash"></i></button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -25,7 +31,7 @@
 
 <script>
     export default {
-        props: ['dados', 'titulos'],
+        props: ['dados', 'titulos', 'visualizar', 'editar', 'deletar'],
         computed: {
             // filtrar dados de acorda com os metadados recebidos no bind :titulos
             dadosFiltrados() {

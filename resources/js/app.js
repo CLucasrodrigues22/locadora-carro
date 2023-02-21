@@ -6,7 +6,6 @@
 
 import './bootstrap';
 import '../css/app.css';
-import swal from 'sweetalert';
 import { createApp } from 'vue';
 
 /**
