@@ -154,10 +154,8 @@
                         <input type="text" class="form-control" id="novoNome" aria-describedby="novoNomeHelp"
                             placeholder="Nome da marca" v-model="$store.state.item.nome">
                     </input-container-component>
-                    <input-container-component titulo="Imagem da Marca" id="novaImagem" name="novaImagem"
-                        id-help="imagemHelp" texto-ajuda="(Opcional) Selecione a imagem da Marca">
-                        <input type="file" class="form-control" id="novaImagem" aria-describedby="imagemHelp"
-                            @change="carregarImagem($event)">
+                    <input-container-component titulo="Imagem" id="atualizarImagem" id-help="atualizarImagemHelp" texto-ajuda="Selecione uma imagem no formato PNG">
+                        <input type="file" class="form-control" id="atualizarImagem" aria-describedby="atualizarImagemHelp" placeholder="Selecione uma imagem" @change="carregarImagem($event)">
                     </input-container-component>
                 </div>
             </template>
@@ -311,30 +309,33 @@ export default {
                     }
                 });
         },
-        editar(item) {
-            // criando url para edição
-            let url = this.urlBase + '/' + this.$store.state.item.id
-
-            let formData = new FormData();
-            formData.append('_method', 'patch');
-            formData.append('nome', item.nome);
-            formData.append('imagem', this.imagemMarca[0]);
-
-            // criando os headers
-            let cfg = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json',
-                    'Authorization': this.token
+        editar() {
+                let formData = new FormData();
+                formData.append('_method', 'patch')
+                formData.append('nome', this.$store.state.item.nome)
+                if(this.imagemMarca[0]) {
+                    formData.append('imagem', this.imagemMarca[0])
                 }
-            }
-            axios.post(url, formData, cfg)
-                .then(response => {
-                    console.log(response)
-                })
-                .catch(errors => {
-                    console.log(errors)
-                })
+
+                let url = this.urlBase + '/' + this.$store.state.item.id
+
+                let cfg = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'Accept': 'application/json',
+                        'Authorization': this.token
+                    }
+                }
+
+                axios.post(url, formData, cfg)
+                    .then(response => {
+                        swal("Sucesso!", `Marca ${this.$store.state.item.nome} editada com sucesso!`, "success");
+                        atualizarImagem.value = ''
+                        this.carregarMarcas()
+                    })
+                    .catch(errors => {
+                        console.log(errors.response)
+                    })
         }
     },
     mounted() {

@@ -95,6 +95,7 @@ class MarcaController extends Controller
     {
         $marca = $this->marca->find($id);
 
+        // valida se marca existe no banco
         if($marca === null) {
             return response()->json(['erro' => 'Impossível realizar a atualização. O recurso solicitado não existe'], 404);
         }
@@ -117,26 +118,21 @@ class MarcaController extends Controller
         } else {
             $request->validate($marca->rules(), $marca->feedback());
         }
+        
+        //preenchendo o objeto $marca com todos os dados do request
+        $marca->fill($request->all());
 
-
-        //remove o arquivo antigo caso um novo arquivo tenha sido enviado no request
-        if($request->file('imagem') != null) {
-            // Deleta a imagem atual
+        //se a imagem foi encaminhada na requisição
+        if($request->file('imagem')) {
+            //remove o arquivo antigo
             Storage::disk('public')->delete($marca->imagem);
-            // salvando caminho da nova imagem ao objeto $marca
+
             $imagem = $request->file('imagem');
             $imagem_urn = $imagem->store('imagens/marcas', 'public');
-            // atribuindo novo caminho da nova imagem ao objeto $marca
             $marca->imagem = $imagem_urn;
-        } else {
-            $imagem_urn = $marca->imagem;
         }
-        $marca->fill($request->all());
-        $marca->imagem = $imagem_urn;
 
-        // salvando dados
         $marca->save();
-
         return response()->json($marca, 200);
     }
 
