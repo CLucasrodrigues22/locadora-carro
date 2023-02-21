@@ -7,6 +7,7 @@
 import './bootstrap';
 import '../css/app.css';
 import { createApp } from 'vue';
+import { createStore } from 'vuex'
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
@@ -15,6 +16,13 @@ import { createApp } from 'vue';
  */
 
 const app = createApp({});
+const store = createStore({ 
+    state: { 
+        teste: 'Teste de recuperação de valor da Store Vuex' 
+    } 
+});
+
+app.use(store)
 
 // importar componentes globais
 import Login from './components/Login.vue';
