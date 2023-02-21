@@ -7,3 +7,9 @@
 button.adicionar {
     float: right;
 }
+
+.btnDeletar {
+    padding-left: 31%;
+    padding-right: 31%;
+}
+
