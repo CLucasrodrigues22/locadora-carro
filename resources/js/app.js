@@ -18,7 +18,7 @@ import { createStore } from 'vuex'
 const app = createApp({});
 const store = createStore({ 
     state: { 
-        teste: 'Teste de recuperação de valor da Store Vuex' 
+        item: {}
     } 
 });
 

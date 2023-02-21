@@ -101,29 +101,21 @@
         <!-- Modal de vizualização de marca -->
         <modal-component id="modalMarcaVisualizar" titulo="Dados da Marca">
             <template v-slot:alerta>
-                <alert-component classe="success" :feedback="feedbackMessage" conteudo="Marca cadastrada com sucesso."
-                    v-if="this.feedbackStatus == 'sucesso'"></alert-component>
-                <alert-component classe="danger" :feedback="feedbackMessage"
-                    conteudo="Ocorreu o(s) seguinte(s) erro(s) ao cadastrar a nova Marca: "
-                    v-if="this.feedbackStatus == 'erro'"></alert-component>
+                
             </template>
             <template v-slot:conteudo>
-                <div class="form-group">
-                    <input-container-component titulo="Nome da Marca" id="novaMarca" id-help="novaMarcaHelp"
-                        texto-ajuda="(Obrigatório) Informe o nome da marca">
-                        <input type="text" class="form-control" id="novoNome" aria-describedby="novoNomeHelp"
-                            placeholder="Nome da marca" v-model="novaMarca" required>
-                    </input-container-component>
-                    <input-container-component titulo="Imagem da Marca" id="novaImagem" name="novaImagem"
-                        id-help="imagemHelp" texto-ajuda="(Obrigatório) Selecione a imagem da Marca">
-                        <input type="file" class="form-control" id="novaImagem" aria-describedby="imagemHelp"
-                            @change="carregarImagem($event)" required>
-                    </input-container-component>
-                </div>
+                <input-container-component titulo="ID">
+                    <input type="text" class="form-control" readonly :value="$store.state.item.id">
+                </input-container-component>
+                <input-container-component titulo="Nome da Marca">
+                    <input type="text" class="form-control" readonly :value="$store.state.item.nome">
+                </input-container-component>
+                <input-container-component titulo="Logo da Marca">
+                    <img :src="'storage/'+$store.state.item.imagem" alt="Logo da Marca" v-if="$store.state.item.imagem">
+                </input-container-component>
             </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" @click="salvar()">Salvar Marca</button>
             </template>
         </modal-component>
         <!-- Fim do modal de vizualização de marca -->
