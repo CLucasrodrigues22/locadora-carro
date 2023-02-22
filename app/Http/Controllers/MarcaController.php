@@ -144,17 +144,23 @@ class MarcaController extends Controller
      */
 
     public function destroy($id)
-    {
+    {  
         $marca = $this->marca->find($id);
-        if($marca === null)
-        {
-            return response()->json(['msg' => 'Erro ao deletar, marca não existe em nosso banco'], 404);
+
+        try {
+            if($marca === null)
+            {
+                return response()->json(['msg' => 'Erro ao deletar, marca não existe em nosso banco'], 404);
+            }
+            
+            $marca->delete();
+
+            // remove imagem antiga caso ele exista
+            Storage::disk('public')->delete($marca->imagem);
+
+            return response()->json(['msg' => 'Marca removida com sucesso'], 200);
+        } catch (\PDOException $e) {
+            return response()->json(['msg' => 'Erro: '.$e->getMessage()], 500);
         }
-
-        // remove imagem antiga caso ele exista
-        Storage::disk('public')->delete($marca->imagem);
-
-        $marca->delete();
-        return response()->json(['msg' => 'Marca removida com sucesso'], 200);
     }
 }

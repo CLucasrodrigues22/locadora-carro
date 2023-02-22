@@ -33,7 +33,8 @@
                 <!-- Card de Listagem de marca -->
                 <card-component titulo="Relação de Marcas">
                     <template v-slot:conteudo>
-                        <table-component :dados="marcas.data" 
+                        <table-component 
+                        :dados="marcas.data"
                         :visualizar="{
                             visivel: true,
                             dataToggle: 'modal',
@@ -110,14 +111,14 @@
 
             </template>
             <template v-slot:conteudo>
+                <div class="imgMarca">
+                    <img class="rounded-circle" :src="'storage/' + $store.state.item.imagem" alt="Logo da Marca" v-if="$store.state.item.imagem">
+                </div>
                 <input-container-component titulo="ID">
                     <input type="text" class="form-control" readonly :value="$store.state.item.id">
                 </input-container-component>
                 <input-container-component titulo="Nome da Marca">
                     <input type="text" class="form-control" readonly :value="$store.state.item.nome">
-                </input-container-component>
-                <input-container-component titulo="Logo da Marca">
-                    <img :src="'storage/' + $store.state.item.imagem" alt="Logo da Marca" v-if="$store.state.item.imagem">
                 </input-container-component>
             </template>
             <template v-slot:rodape>
@@ -184,6 +185,8 @@ export default {
             marcas: {
                 data: []
             },
+            modelos: {
+            },
             busca: { id: '', nome: '' }
         }
     },
@@ -219,7 +222,6 @@ export default {
             axios.get(url)
                 .then(response => {
                     this.marcas = response.data
-                    //console.log(this.marcas)
                 })
                 .catch(errors => {
                     console.log(errors)
@@ -279,9 +281,10 @@ export default {
                                 this.carregarMarcas()
                             })
                             .catch(errors => {
-                                swal(`Ocorreu um erro ao tentar deletar dados de marca ${item.nome} do banco de dados.`, {
+                                swal(`Existem modelos associados a marca ${item.nome} no banco de dados.`, {
                                     icon: "error",
                                 });
+                                console.log(errors)
                             })
                     }
                 });
