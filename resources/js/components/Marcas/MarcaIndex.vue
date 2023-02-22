@@ -172,20 +172,6 @@
 
 <script>
 export default {
-    computed: {
-        token() {
-            // separar o objeto cookie atravez do ; para resgatar o atributo token
-            let token = document.cookie.split(';').find(indice => {
-                return indice.startsWith('token=');
-
-                // separando o atributo token pelo "=" para resgatar apenas o valor do mesmo
-                token = token.split('=')[1];
-                token = 'Bearer ' + token;
-
-                return token
-            });
-        }
-    },
     data() {
         return {
             urlBase: 'http://127.0.0.1:8000/api/v1/marca',
@@ -253,8 +239,6 @@ export default {
             let cfg = {
                 headres: {
                     'Content-Type': 'multipart/form-data',
-                    'Accept': 'application/json',
-                    'Authorization': this.token
                 }
             }
 
@@ -286,15 +270,8 @@ export default {
                         // criando uma instância de forData e passando o metodo para delete
                         let formData = new FormData();
                         formData.append('_method', 'delete');
-                        // criando os headers
-                        let cfg = {
-                            headres: {
-                                'Accept': 'application/json',
-                                'Authorization': this.token
-                            }
-                        }
 
-                        axios.post(url, formData, cfg)
+                        axios.post(url, formData)
                             .then(response => {
                                 swal(`A marca ${item.nome} foi removida com sucesso!`, {
                                     icon: "success",
@@ -303,7 +280,7 @@ export default {
                             })
                             .catch(errors => {
                                 swal(`Ocorreu um erro ao tentar deletar dados de marca ${item.nome} do banco de dados.`, {
-                                    icon: "danger",
+                                    icon: "error",
                                 });
                             })
                     }
@@ -322,8 +299,6 @@ export default {
                 let cfg = {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Accept': 'application/json',
-                        'Authorization': this.token
                     }
                 }
 
@@ -334,6 +309,7 @@ export default {
                         this.carregarMarcas()
                     })
                     .catch(errors => {
+                        swal("Erro!", `Ocorreu um erro no cadastro da marca: erro ${errors.response.data.message}`, "error");
                         console.log(errors.response)
                     })
         }
