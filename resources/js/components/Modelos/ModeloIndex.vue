@@ -76,8 +76,9 @@
                 <div class="form-group">
                     <input-container-component titulo="Marca do modelo" id="marcaModelo" id-help="marcaModeloHelp"
                         texto-ajuda="(Obrigatório) Informe a marca que o modelo pertence">
-                        <input type="text" class="form-control" id="marcaModelo" aria-describedby="marcaModeloHelp"
-                            placeholder="Nome do modelo" v-model="marcaModelo" required>
+                        <select class="form-select" aria-label="numeroPortas" v-model="marcaModelo">
+                            <option value="1">1</option>
+                        </select>
                     </input-container-component>
                     <input-container-component titulo="Nome do Modelo" id="novoModelo" id-help="novoModeloHelp"
                         texto-ajuda="(Obrigatório) Informe o nome do modelo">
@@ -156,6 +157,9 @@ export default {
             modelos: {
                 data: []
             },
+            marcas: {
+                data: []
+            },
             busca: { id: '', nome: '', numero_portas: '', lugares: '', air_bag: '', abs: '' }
         }
     },
@@ -169,6 +173,20 @@ export default {
         //             console.log(errors)
         //         })
         // },
+        carregarDadosMarcas() {
+            let urlMarca = 'http://127.0.0.1:8000/api/v1/marca'
+            axios.get(urlMarca)
+                .then(response => {
+                    let marcasDados = response.data.data;
+                    for(let valor in marcasDados) {
+                        console.log(valor, '=', marcasDados[valor[0]]);
+                    }
+                    this.marcas = response.data
+                })
+                .catch(errors => {
+                    console.log(errors)
+                })
+        },
         carregarImagem(e) {
             this.imagemModelo = e.target.files
         },
@@ -202,8 +220,8 @@ export default {
                 })
         }
     },
-    // mounted() {
-    //     this.carregarModelos()
-    // }
+    mounted() {
+        this.carregarDadosMarcas()
+    }
 }
 </script>

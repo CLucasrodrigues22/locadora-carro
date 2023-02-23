@@ -29,7 +29,6 @@ axios.interceptors.request.use(
             // definir para todas as requisições os parâmetros de accept e Authorization
             config.headers.Authorization = token
 
-            console.log('request antes do envio', config);
             return config
         },
             error => {
@@ -41,7 +40,6 @@ axios.interceptors.request.use(
         // interceptar os responses da aplicação
         axios.interceptors.response.use(
             response => {
-                console.log('Interceptando a resposta antes da aplicação', response)
                 return response
             },
             error => {
