@@ -35,6 +35,8 @@ import Alert from './components/Alert.vue';
 import Pagination from './components/Pagination.vue';
 // ------ Marcas ------- //
 import MarcaIndex from './components/Marcas/MarcaIndex.vue';
+// ------ Modelos ------- //
+import ModeloIndex from './components/Modelos/ModeloIndex.vue';
 
 // servir componentes globais
 app.component('login-component', Login);
@@ -47,6 +49,7 @@ app.component('alert-component', Alert);
 app.component('pagination-component', Pagination);
 // ------ Marcas ------- //
 app.component('marcaindex-component', MarcaIndex);
+app.component('modeloindex-component', ModeloIndex);
 
 /**
  * The following block of code may be used to automatically register your

@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <!-- Card de busca de marca -->
-                <card-component titulo="Busca de marcas">
+                <card-component titulo="Busca de Marcas">
                     <template v-slot:conteudo>
                         <div class="row">
                             <div class="col mb-3">

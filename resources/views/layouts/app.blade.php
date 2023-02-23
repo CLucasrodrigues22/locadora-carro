@@ -44,7 +44,7 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="{{ route('marcas') }}">Lista de Marcas</a></li>
-                  <li><a class="dropdown-item" href="#">Lista de Modelos</a></li>
+                  <li><a class="dropdown-item" href="{{ route('modelos') }}">Lista de Modelos</a></li>
                   <li><a class="dropdown-item" href="#">Lista de Carros</a></li>
                 </ul>
               </li>
