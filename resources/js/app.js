@@ -33,9 +33,8 @@ import Card from './components/Card.vue';
 import Modal from './components/Modal.vue';
 import Alert from './components/Alert.vue';
 import Pagination from './components/Pagination.vue';
-// ------ Marcas ------- //
+// ------ Views ------- //
 import MarcaIndex from './components/Marcas/MarcaIndex.vue';
-// ------ Modelos ------- //
 import ModeloIndex from './components/Modelos/ModeloIndex.vue';
 
 // servir componentes globais
@@ -47,7 +46,7 @@ app.component('card-component', Card);
 app.component('modal-component', Modal);
 app.component('alert-component', Alert);
 app.component('pagination-component', Pagination);
-// ------ Marcas ------- //
+// ------ Views ------- //
 app.component('marcaindex-component', MarcaIndex);
 app.component('modeloindex-component', ModeloIndex);
 
