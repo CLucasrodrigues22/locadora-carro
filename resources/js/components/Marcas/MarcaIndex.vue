@@ -54,7 +54,6 @@
                         }">
                         </table-component>
                     </template>
-
                     <template v-slot:rodape>
                         <div class="row">
                             <div class="col-10">

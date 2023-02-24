@@ -29,7 +29,7 @@
                 </card-component>
                 <!-- Fim do card de busca de modelos -->
 
-                <!-- Card de Listagem de marca -->
+                <!-- Card de Listagem de modelo -->
                 <card-component titulo="Relação de Modelos">
                     <template v-slot:conteudo>
                         <table-component
@@ -49,7 +49,7 @@
                         }" :titulos="{
                                 id: { titulo: 'ID', tipo: 'texto' },
                                 nome: { titulo: 'Nome', tipo: 'texto' },
-                                marca: { titulo: 'Marca', tipo: 'texto' },
+                                marca_id: { titulo: 'Marca', tipo: 'texto' },
                         }"
                         >
                         </table-component>
@@ -67,10 +67,11 @@
                         </div>
                     </template>
                 </card-component>
-                <!-- Fim do Card de Listagem de marca -->
+                <!-- Fim do Card de Listagem de modelo -->
             </div>
         </div>
-        <!-- Modal de cadastro de marca -->
+
+        <!-- Modal de cadastro de modelo -->
         <modal-component id="modalModelo" titulo="Cadastro de Modelo">
             <template v-slot:conteudo>
                 <div class="form-group">
@@ -134,7 +135,49 @@
                 <button type="button" class="btn btn-primary" @click="salvar()">Salvar Modelo</button>
             </template>
         </modal-component>
-        <!-- Fim do modal de cadastro de marca -->
+        <!-- Fim do modal de cadastro de modelo -->
+
+        <!-- Modal de vizualização de modelo -->
+        <!-- <modal-component id="modalModeloVisualizar" titulo="Dados da Marca">
+            <template v-slot:alerta>
+
+            </template>
+            <template v-slot:conteudo>
+               
+            </template>
+            <template v-slot:rodape>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </template>
+        </modal-component> -->
+        <!-- Fim do modal de vizualização de modelo -->
+
+        <!-- Modal de exclusão de modelo -->
+        <!-- <modal-component id="modalModeloDeletar" titulo="Dados da marca a ser removida">
+            <template v-slot:conteudo>
+               
+            </template>
+            <template v-slot:rodape>
+                <div class="btnDeletar">
+                    <button type="button" class="btn btn-secondary m-1" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-danger m-1">Deletar</button>
+                </div>
+            </template>
+        </modal-component> -->
+        <!-- Fim do modal de exclusão de modelo -->
+
+        <!-- Modal de edição de modelo -->
+        <!-- <modal-component id="modalModeloEditar" titulo="Dados da marca">
+            <template v-slot:conteudo>
+                
+            </template>
+            <template v-slot:rodape>
+                <div class="btnDeletar">
+                    <button type="button" class="btn btn-secondary m-1" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary m-1">Editar</button>
+                </div>
+            </template>
+        </modal-component> -->
+        <!-- Fim do modal de edição de modelo -->
     </div>
 </template>
 
@@ -164,25 +207,52 @@ export default {
         }
     },
     methods: {
-        // carregarModelos() {
-        //     axios.get(this.urlBase)
-        //         .then(response => {
-        //             this.modelos = response.data
-        //         })
-        //         .catch(errors => {
-        //             console.log(errors)
-        //         })
-        // },
+        pesquisar() {
+            let filtro = ''
+
+            for (let chave in this.busca) {
+                if (this.busca[chave]) {
+                    if (filtro != '') {
+                        filtro += ";"
+                    }
+
+                    filtro += chave + ':like:' + this.busca[chave];
+                }
+            }
+            if (filtro != '') {
+                this.urlPaginacao = 'page=1';
+                this.urlFiltro = '&filtro=' + filtro;
+            } else {
+                this.urlFiltro = ''
+            }
+            this.carregarMarcas()
+        },
+        paginacao(li) {
+            if (li.url) {
+                this.urlPaginacao = li.url.split('?')[1];
+                this.carregarMarcas() // requisitando novamente os dados para nossa API com base na URL atualizada
+            }
+        },
+        carregarModelos() {
+            let url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro;
+            axios.get(url)
+                .then(response => {
+                    this.modelos = response.data
+                    console.log(this.modelos)
+                })
+                .catch(errors => {
+                    console.log(errors)
+                })
+        },
         carregarDadosMarcas() {
             let urlMarca = 'http://127.0.0.1:8000/api/v1/marca'
             axios.get(urlMarca)
                 .then(response => {
                     let marcasDados = response.data.data
-                    marcasDados.forEach((valorAtual, indice, array) => {
+                    marcasDados.forEach((valorAtual) => {
                         var dadosMarca = [valorAtual.id, valorAtual.nome];
                         this.marcas.data.push(dadosMarca)
                     })
-                    console.log(this.marcas)
                 })
                 .catch(errors => {
                     console.log(errors)
@@ -214,7 +284,7 @@ export default {
             axios.post(this.urlBase, formData, cfg)
                 .then(response => {
                     swal("Sucesso!", `Modelo ${this.novoModelo} cadastrado com sucesso!`, "success");
-                    this.carregarMarcas()
+                    this.carregarModelos()
                 })
                 .catch(errors => {
                     swal("Erro!", `Ocorreu o seguinte erro: ${errors.response}.`, "error");
@@ -222,6 +292,7 @@ export default {
         }
     },
     mounted() {
+        this.carregarModelos()
         this.carregarDadosMarcas()
     }
 }
