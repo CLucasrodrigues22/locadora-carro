@@ -77,7 +77,7 @@
                     <input-container-component titulo="Marca do modelo" id="marcaModelo" id-help="marcaModeloHelp"
                         texto-ajuda="(Obrigatório) Informe a marca que o modelo pertence">
                         <select class="form-select" aria-label="numeroPortas" v-model="marcaModelo">
-                            <option value="1">1</option>
+                            <option v-for="item, key in marcas.data" :key="key" :value="item[0]">{{ item[1] }}</option>
                         </select>
                     </input-container-component>
                     <input-container-component titulo="Nome do Modelo" id="novoModelo" id-help="novoModeloHelp"
@@ -177,11 +177,12 @@ export default {
             let urlMarca = 'http://127.0.0.1:8000/api/v1/marca'
             axios.get(urlMarca)
                 .then(response => {
-                    let marcasDados = response.data.data;
-                    for(let valor in marcasDados) {
-                        console.log(valor, '=', marcasDados[valor[0]]);
-                    }
-                    this.marcas = response.data
+                    let marcasDados = response.data.data
+                    marcasDados.forEach((valorAtual, indice, array) => {
+                        var dadosMarca = [valorAtual.id, valorAtual.nome];
+                        this.marcas.data.push(dadosMarca)
+                    })
+                    console.log(this.marcas)
                 })
                 .catch(errors => {
                     console.log(errors)
