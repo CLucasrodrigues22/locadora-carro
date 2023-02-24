@@ -12,14 +12,15 @@
                     <td v-for="valor, chaveValor in obj" :key="chaveValor">
                         <span v-if="titulos[chaveValor].tipo == 'texto'">{{valor}}</span>
                         <span v-if="titulos[chaveValor].tipo == 'data'">
-                            {{ '...'+valor}}
+                            {{ $filters.formataDataTempo(valor) }}
                         </span>
+                        <span v-if="titulos[chaveValor].tipo == 'array'">{{valor.nome}}</span>
                         <span v-if="titulos[chaveValor].tipo == 'imagem'">
                             <img :src="'/storage/'+valor" width="50" height="50">
                         </span>
                     </td>
                     <td v-if="visualizar.visivel || editar.visivel || deletar.visivel"> 
-                        <button v-if="visualizar.visivel" class="btn btn btn-primary btn-sm m-1" title="Visualizar" :data-bs-toggle="visualizar.dataToggle" :data-bs-target="visualizar.dataTarget" @click="setStore(obj)"><i class="bi bi-eye"></i></button>
+                        <button v-if="visualizar.visivel" class="btn btn btn-primary btn-sm m-1" title="Visualizar dados" :data-bs-toggle="visualizar.dataToggle" :data-bs-target="visualizar.dataTarget" @click="setStore(obj)"><i class="bi bi-eye"></i></button>
                         <button v-if="editar.visivel" class="btn btn btn-warning btn-sm m-1" title="Editar" @click="setStore(obj)" :data-bs-toggle="editar.dataToggle" :data-bs-target="editar.dataTarget"><i class="bi bi-pencil"></i></button>
                         <button v-if="deletar.visivel" class="btn btn btn-danger btn-sm m-1" title="Deletar" @click="setStore(obj)" :data-bs-toggle="deletar.dataToggle" :data-bs-target="deletar.dataTarget"><i class="bi bi-trash"></i></button>
                     </td>
@@ -31,11 +32,11 @@
 
 <script>
     export default {
-        props: ['dados', 'titulos', 'visualizar', 'editar', 'deletar'],
+        props: ['dados', 'titulos', 'visualizar', 'editar', 'deletar', 'dadosVisivel'],
         methods: {
             setStore(obj) {
                 this.$store.state.item = obj
-            }
+            },
         },
         computed: {
             // filtrar dados de acorda com os metadados recebidos no bind :titulos

@@ -37,7 +37,8 @@
                         :visualizar="{
                             visivel: true,
                             dataToggle: 'modal',
-                            dataTarget: '#modalModeloVisualizar'
+                            dataTarget: '#modalModeloVisualizar',
+                            dadosVisivel: modelos.data
                         }" :editar="{
                                 visivel: true,
                                 dataToggle: 'modal',
@@ -49,7 +50,8 @@
                         }" :titulos="{
                                 id: { titulo: 'ID', tipo: 'texto' },
                                 nome: { titulo: 'Nome', tipo: 'texto' },
-                                marca_id: { titulo: 'Marca', tipo: 'texto' },
+                                created_at: { titulo: 'Data de Criação', tipo: 'data' },
+                                marca: { titulo: 'Marca', tipo: 'array' },
                         }"
                         >
                         </table-component>
@@ -138,23 +140,27 @@
         <!-- Fim do modal de cadastro de modelo -->
 
         <!-- Modal de vizualização de modelo -->
-        <!-- <modal-component id="modalModeloVisualizar" titulo="Dados da Marca">
-            <template v-slot:alerta>
-
-            </template>
+        <modal-component id="modalModeloVisualizar" titulo="Dados da Marca">
             <template v-slot:conteudo>
-               
+                <div class="card">
+                    <img src="" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $store.state.item }}</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
             </template>
             <template v-slot:rodape>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             </template>
-        </modal-component> -->
+        </modal-component>
         <!-- Fim do modal de vizualização de modelo -->
 
         <!-- Modal de exclusão de modelo -->
-        <!-- <modal-component id="modalModeloDeletar" titulo="Dados da marca a ser removida">
+        <modal-component id="modalModeloDeletar" titulo="Dados da marca a ser removida">
             <template v-slot:conteudo>
-               
+                
             </template>
             <template v-slot:rodape>
                 <div class="btnDeletar">
@@ -162,11 +168,11 @@
                     <button type="button" class="btn btn-danger m-1">Deletar</button>
                 </div>
             </template>
-        </modal-component> -->
+        </modal-component>
         <!-- Fim do modal de exclusão de modelo -->
 
         <!-- Modal de edição de modelo -->
-        <!-- <modal-component id="modalModeloEditar" titulo="Dados da marca">
+        <modal-component id="modalModeloEditar" titulo="Dados da marca">
             <template v-slot:conteudo>
                 
             </template>
@@ -176,7 +182,7 @@
                     <button type="button" class="btn btn-primary m-1">Editar</button>
                 </div>
             </template>
-        </modal-component> -->
+        </modal-component>
         <!-- Fim do modal de edição de modelo -->
     </div>
 </template>
@@ -238,7 +244,6 @@ export default {
             axios.get(url)
                 .then(response => {
                     this.modelos = response.data
-                    console.log(this.modelos)
                 })
                 .catch(errors => {
                     console.log(errors)

@@ -50,6 +50,23 @@ app.component('pagination-component', Pagination);
 app.component('marcaindex-component', MarcaIndex);
 app.component('modeloindex-component', ModeloIndex);
 
+// filtro de formatação de data global
+app.config.globalProperties.$filters = {
+    formataDataTempo(d) {
+        if (!d) return "";
+        
+        d = d.split("T")
+        let data = d[0]
+        data = data.split("-")
+        data = data[2] + "/" + data[1] + "/" + data[0];
+    
+        let tempo = d[1]  
+        tempo = tempo.split('.')
+        tempo = tempo[0]     
+    
+        return tempo + ' - ' + data
+    },
+},
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
