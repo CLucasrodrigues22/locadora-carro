@@ -34,6 +34,7 @@
                     <template v-slot:conteudo>
                         <table-component
                         :dados="modelos.data"
+                        :relacionados="modelos.data"
                         :visualizar="{
                             visivel: true,
                             dataToggle: 'modal',
@@ -143,11 +144,28 @@
         <modal-component id="modalModeloVisualizar" titulo="Dados da Marca">
             <template v-slot:conteudo>
                 <div class="card">
-                    <img src="" class="card-img-top" alt="...">
+                    <img :src="'storage/'+$store.state.item.imagem" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="card-title">{{ $store.state.item }}</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                        <h4 class="card-title mb-3">Modelo: <strong>{{ $store.state.item.nome }}</strong></h4>
+                        <ol class="list-group list-group-numbered">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                            <div class="fw-bold">Marca</div>
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                            <div class="fw-bold">Subheading</div>
+                            Content for list item
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                            <div class="fw-bold">Subheading</div>
+                            Content for list item
+                            </div>
+                        </li>
+                        </ol>
                     </div>
                 </div>
             </template>
@@ -244,6 +262,7 @@ export default {
             axios.get(url)
                 .then(response => {
                     this.modelos = response.data
+                    //console.log(this.modelos.data[0].marca.nome)
                 })
                 .catch(errors => {
                     console.log(errors)
