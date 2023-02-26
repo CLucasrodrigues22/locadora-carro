@@ -311,7 +311,7 @@ export default {
                         this.carregarMarcas()
                     })
                     .catch(errors => {
-                        swal("Erro!", `Ocorreu um erro no cadastro da marca: erro ${errors.response.data.message}`, "error");
+                        swal("Erro!", `Ocorreu um erro na edição da marca: erro ${errors.response.data.message}`, "error");
                         console.log(errors.response)
                     })
         }
