@@ -352,7 +352,6 @@ export default {
             this.imagemModelo = e.target.files
         },
         salvar() {
-            console.log(this.marcaModelo, this.novoModelo, this.numeroPortas, this.lugaresModelo, this.airbagModelo, this.absModelo, this.imagemModelo[0])
             // instanciando um formulário para definir os atributos
             let formData = new FormData();
             formData.append('marca_id', this.marcaModelo);
@@ -433,7 +432,7 @@ export default {
                                 swal(`O modelo ${item.nome} foi removida com sucesso!`, {
                                     icon: "success",
                                 });
-                                this.carregarMarcas()
+                                this. carregarModelos()
                             })
                             .catch(errors => {
                                 swal(`Erro, verifique se existe algum carro com relação ao modelo ${item.nome}.`, {
@@ -450,4 +449,4 @@ export default {
         this.carregarDadosMarcas()
     }
 }
-</script>
+</script>j
