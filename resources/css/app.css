@@ -8,9 +8,14 @@ button.adicionar {
     float: right;
 }
 
+.btnModalModelo {
+    padding-left: 25%;
+    padding-right: 25%;
+}
+
 .btnDeletar {
-    padding-left: 31%;
-    padding-right: 31%;
+    padding-left: 32%;
+    padding-right: 32%;
 }
 
 .imgMarca {

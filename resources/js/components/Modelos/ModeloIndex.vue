@@ -181,12 +181,17 @@
         <!-- Modal de exclusão de modelo -->
         <modal-component id="modalModeloDeletar" titulo="Dados da marca a ser removida">
             <template v-slot:conteudo>
-
+                <div class="card">
+                    <img :src="'storage/' + $store.state.item.imagem" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h4 class="card-title mb-3">Modelo: <strong>{{ $store.state.item.nome }}</strong></h4>
+                    </div>
+                </div>
             </template>
             <template v-slot:rodape>
                 <div class="btnDeletar">
                     <button type="button" class="btn btn-secondary m-1" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-danger m-1">Deletar</button>
+                    <button type="button" class="btn btn-danger m-1" @click="deletar($store.state.item)">Deletar</button>
                 </div>
             </template>
         </modal-component>
@@ -251,9 +256,9 @@
                 </div>
             </template>
             <template v-slot:rodape>
-                <div class="btnDeletar">
+                <div class="btnModalModelo">
                     <button type="button" class="btn btn-secondary m-1" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary m-1" @click="editar($store.state.item)">Editar</button>
+                    <button type="button" class="btn btn-primary m-1" @click="editar($store.state.item)">Salvar Alteração</button>
                 </div>
             </template>
         </modal-component>
@@ -406,6 +411,38 @@ export default {
                     swal("Erro!", `Ocorreu um erro no cadastro da marca: erro ${errors.response.data.message}`, "error");
                     console.log(errors.response)
                 })
+        },
+        deletar(item) {
+            swal({
+                title: "Você tem certeza?",
+                text: `Ao confirmar o exclusão, todos os dados de ${item.nome} serão removidos permanentimente da base de dados.`,
+                icon: "warning",
+                buttons: ["Cancelar", "Deletar"],
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        // criando url para delete
+                        let url = this.urlBase + '/' + this.$store.state.item.id
+                        // criando uma instância de forData e passando o metodo para delete
+                        let formData = new FormData();
+                        formData.append('_method', 'delete');
+
+                        axios.post(url, formData)
+                            .then(response => {
+                                swal(`O modelo ${item.nome} foi removida com sucesso!`, {
+                                    icon: "success",
+                                });
+                                this.carregarMarcas()
+                            })
+                            .catch(errors => {
+                                swal(`Erro, verifique se existe algum carro com relação ao modelo ${item.nome}.`, {
+                                    icon: "error",
+                                });
+                                console.log(errors)
+                            })
+                    }
+                });
         }
     },
     mounted() {
