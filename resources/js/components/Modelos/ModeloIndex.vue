@@ -10,14 +10,14 @@
                                 <input-container-component titulo="ID" id="inputId" id-help="idHelp"
                                     texto-ajuda="(Opcional) Informe o ID do modelo">
                                     <input type="number" class="form-control" id="inputId" aria-describedby="idHelp"
-                                        placeholder="ID">
+                                        placeholder="ID" v-model="busca.id">
                                 </input-container-component>
                             </div>
                             <div class="col mb-3">
                                 <input-container-component titulo="Nome do Modelo" id="inputNome" id-help="nomeHelp"
                                     texto-ajuda="(Opcional) Informe o nome do Modelo">
                                     <input type="text" class="form-control" id="inputNome" aria-describedby="nomeHelp"
-                                        placeholder="Ex: Gol">
+                                        placeholder="Ex: Gol" v-model="busca.nome">
                                 </input-container-component>
                             </div>
                         </div>
@@ -57,7 +57,12 @@
                     <template v-slot:rodape>
                         <div class="row">
                             <div class="col-10">
-
+                                <pagination-component>
+                                    <li :class="li.active ? 'page-item active' : 'page-item'"
+                                        v-for="li, key in modelos.links" :key="key" @click="paginacao(li)">
+                                        <a class="page-link" v-html="li.label"></a>
+                                    </li>
+                                </pagination-component>
                             </div>
                             <div class="col-2">
                                 <button type="button" class="btn btn-primary btn-sm adicionar" data-bs-toggle="modal"
@@ -76,7 +81,7 @@
                 <div class="form-group">
                     <input-container-component titulo="Marca do modelo" id="marcaModelo" id-help="marcaModeloHelp"
                         texto-ajuda="(Obrigatório) Informe a marca que o modelo pertence">
-                        <select class="form-select" aria-label="numeroPortas" v-model="marcaModelo">
+                        <select class="form-select" v-model="marcaModelo">
                             <option v-for="item, key in marcas.data" :key="key" :value="item[0]">{{ item[1] }}</option>
                         </select>
                     </input-container-component>
@@ -316,12 +321,12 @@ export default {
             } else {
                 this.urlFiltro = ''
             }
-            this.carregarMarcas()
+            this.carregarModelos()
         },
         paginacao(li) {
             if (li.url) {
                 this.urlPaginacao = li.url.split('?')[1];
-                this.carregarMarcas() // requisitando novamente os dados para nossa API com base na URL atualizada
+                this.carregarModelos() // requisitando novamente os dados para nossa API com base na URL atualizada
             }
         },
         carregarModelos() {
@@ -335,10 +340,10 @@ export default {
                 })
         },
         carregarDadosMarcas() {
-            let urlMarca = 'http://127.0.0.1:8000/api/v1/marca'
+            let urlMarca = 'http://127.0.0.1:8000/api/v1/marca?all'
             axios.get(urlMarca)
                 .then(response => {
-                    let marcasDados = response.data.data
+                    let marcasDados = response.data
                     marcasDados.forEach((valorAtual) => {
                         var dadosMarca = [valorAtual.id, valorAtual.nome];
                         this.marcas.data.push(dadosMarca)

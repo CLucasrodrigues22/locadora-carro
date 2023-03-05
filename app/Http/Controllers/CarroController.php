@@ -45,7 +45,12 @@ class CarroController extends Controller
             $carroRepository->selectAtributos($request->atributos);
         }
 
-        return response()->json($carroRepository->getResultado(), 200);
+         // condição caso exista o atributo atributos na url
+         if ($request->has('all')) {
+            return response()->json($carroRepository->getResultado(), 200);
+        } else {
+            return response()->json($carroRepository->getResultadoPaginado(5), 200);
+        }
     }
 
     /**

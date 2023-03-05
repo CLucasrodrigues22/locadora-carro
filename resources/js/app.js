@@ -36,6 +36,7 @@ import Pagination from './components/Pagination.vue';
 // ------ Views ------- //
 import MarcaIndex from './components/Marcas/MarcaIndex.vue';
 import ModeloIndex from './components/Modelos/ModeloIndex.vue';
+import CarroIndex from './components/Carros/CarroIndex.vue';
 
 // servir componentes globais
 app.component('login-component', Login);
@@ -49,6 +50,7 @@ app.component('pagination-component', Pagination);
 // ------ Views ------- //
 app.component('marcaindex-component', MarcaIndex);
 app.component('modeloindex-component', ModeloIndex);
+app.component('carroindex-component', CarroIndex);
 
 // filtro de formatação de data global
 app.config.globalProperties.$filters = {

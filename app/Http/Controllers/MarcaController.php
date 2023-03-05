@@ -44,7 +44,12 @@ class MarcaController extends Controller
             $marcaRepository->selectAtributos($request->atributos);
         }
 
-        return response()->json($marcaRepository->getResultadoPaginado(5), 200);
+        // condição caso exista o atributo atributos na url
+        if ($request->has('all')) {
+            return response()->json($marcaRepository->getResultado(), 200);
+        } else {
+            return response()->json($marcaRepository->getResultadoPaginado(5), 200);
+        }
     }
 
     /**
