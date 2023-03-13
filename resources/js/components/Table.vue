@@ -48,7 +48,6 @@
         computed: {
             // filtrar dados de acorda com os metadados recebidos no bind :titulos
             dadosFiltrados() {
-                
                 // resgata cada atributo da props "dados"
                 let campos = Object.keys(this.titulos)
                 // array a ser preenchido com cada objeto

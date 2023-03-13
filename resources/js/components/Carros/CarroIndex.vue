@@ -32,25 +32,23 @@
                 <!-- Card de Listagem de carros -->
                 <card-component titulo="Relação de Carros">
                     <template v-slot:conteudo>
-                        <table-component 
-                        :dados="carros.data"
-                        :visualizar="{
+                        <table-component :dados="carros.data" :visualizar="{
                             visivel: true,
                             dataToggle: 'modal',
                             dataTarget: '#modalCarroVisualizar'
-                        }" :editar="{
+                            }" :editar="{
                                 visivel: true,
                                 dataToggle: 'modal',
                                 dataTarget: '#modalCarroEditar'
-                        }" :deletar="{
+                            }" :deletar="{
                                 dataToggle: 'modal',
                                 dataTarget: '#modalCarroDeletar',
                                 visivel: true
-                        }" :titulos="{
+                            }" :titulos="{
                                 id: { titulo: 'ID', tipo: 'texto' },
                                 modelo: { titulo: 'Modelo', tipo: 'array' },
                                 placa: { titulo: 'Placa', tipo: 'texto' },
-                        }">
+                            }">
                         </table-component>
                     </template>
                     <template v-slot:rodape>
@@ -72,6 +70,47 @@
                 </card-component>
                 <!-- Fim do Card de Listagem de carros -->
 
+                <!-- Modal de vizualização de modelo -->
+                <modal-component id="modalCarroVisualizar" titulo="Dados do Carro">
+                    <template v-slot:conteudo>
+                        <div class="card">
+                            <div class="card-body">
+                                <ol class="list-group list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold"> Placa do carro</div>
+                                            {{ $store.state.item.placa }}
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold"> Disponivel</div>
+                                            {{ $store.state.item.disponivel != 1 ? 'Carro não disponível' : 'Carro disponível' }}
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">KM atual</div>
+                                            {{ $store.state.item.km }} km
+                                        </div>
+                                    </li>
+                                    
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">ABS</div>
+                                            {{ $store.state.item.abs != 1 ? 'Não possui ABS' : 'Possui ABS' }}
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-slot:rodape>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    </template>
+                </modal-component>
+                <!-- Fim do modal de vizualização de modelo -->
+
                 <!-- Modal de cadastro de carro -->
                 <modal-component id="modalCarro" titulo="Cadastro de Carro">
                     <template v-slot:conteudo>
@@ -79,17 +118,20 @@
                             <input-container-component titulo="Modelo do Carro" id="carroModelo" id-help="carroModeloHelp"
                                 texto-ajuda="(Obrigatório) Informe o modelo do carro">
                                 <select class="form-select" aria-label="numeroPortas" v-model="carroModelo">
-                                    <option v-for="item, key in modelos.data" :key="key" :value="item[0]">{{ item[1] }}</option>
+                                    <option v-for="item, key in modelos.data" :key="key" :value="item[0]">{{ item[1] }}
+                                    </option>
                                 </select>
                             </input-container-component>
                             <input-container-component titulo="Placa do Carro" id="placa" id-help="placaHelp"
                                 texto-ajuda="(Obrigatório) Informe a placa do carro">
-                                <input type="text" class="form-control" id="novoNome" aria-describedby="novoNomeHelp"
+                                <input type="text" class="form-control" id="novaPlacaCarro" aria-describedby="novoNomeHelp"
                                     placeholder="AAA-0000" v-model="placa" required>
                             </input-container-component>
-                            <input-container-component titulo="Disponibilidade" id="disponibilidadeModelo" id-help="disponibilidadeHelp"
+                            <input-container-component titulo="Disponibilidade" id="disponibilidadeModelo"
+                                id-help="disponibilidadeHelp"
                                 texto-ajuda="(Obrigatório) Informe a disponibilidade do carro">
-                                <select class="form-select" aria-label="disponibilidadeModelo" id="disponibilidadeModelo" v-model="disponivel">
+                                <select class="form-select" aria-label="disponibilidadeModelo" id="disponibilidadeModelo"
+                                    v-model="disponivel">
                                     <option value="1">Disponivel</option>
                                     <option value="0">Indisponivel</option>
                                 </select>
@@ -108,6 +150,68 @@
                 </modal-component>
                 <!-- Fim do modal de cadastro de carro -->
 
+                <!-- Modal de edição de carro -->
+                <modal-component id="modalCarroEditar" titulo="Dados do Carro">
+                    <template v-slot:conteudo>
+                        <div class="form-group">
+                            <input-container-component titulo="ID do Carro" id="idCarro" id-help="idCarroHelp">
+                                <input type="number" class="form-control" id="idCarro" aria-describedby="idCarroHelp" v-model="$store.state.item.id" readonly>
+                            </input-container-component>
+                            <input-container-component titulo="Modelo do Carro" id="carroModelo" id-help="carroModeloHelp"
+                                texto-ajuda="(Obrigatório) Informe o modelo do carro">
+                                <select class="form-select" aria-label="numeroPortas" v-model="$store.state.item.modelo_id">
+                                    <option v-for="item, key in modelos.data" :key="key" :value="item[0]">{{ item[1] }}
+                                    </option>
+                                </select>
+                            </input-container-component>
+                            <input-container-component titulo="Placa do Carro" id="novaPlaca" idq-help="novaPlacaHelp"
+                                texto-ajuda="(Opcional) Informe a nova placa do carro">
+                                <input type="text" class="form-control" id="novaPlaca" aria-describedby="novaPlacaHelp"
+                                    placeholder="AAA-0000" v-model="$store.state.item.placa">
+                            </input-container-component>
+                            <input-container-component titulo="Disponibilidade" id="disponibilidade" id-help="disponibilidadeHelp"
+                                texto-ajuda="(Opcional) Informe a disponibilidade do carro">
+                                <select class="form-select" aria-label="disponibilidade" v-model="$store.state.item.disponivel">
+                                    <option value="1">Disponivel</option>
+                                    <option value="0">Indisponivel</option>
+                                </select>
+                            </input-container-component>
+                            <input-container-component titulo="KM" id="novoKM" id-help="novoKMHelp"
+                                texto-ajuda="(Opcional) Informe quilometragem do Carro">
+                                <input type="text" class="form-control" id="novoKM" aria-describedby="novoKMHelp"
+                                    placeholder="1000" v-model="$store.state.item.km">
+                            </input-container-component>
+                        </div>
+                    </template>
+                    <template v-slot:rodape>
+                        <div class="btnDeletar">
+                            <button type="button" class="btn btn-secondary m-1" data-bs-dismiss="modal">Fechar</button>
+                            <button type="button" class="btn btn-primary m-1"
+                                @click="editar($store.state.item)">Editar</button>
+                        </div>
+                    </template>
+                </modal-component>
+                <!-- Fim do modal de edição de carro -->
+
+                 <!-- Modal de exclusão de carro -->
+                 <modal-component id="modalCarroDeletar" titulo="Dados do Carro a ser removida">
+                    <template v-slot:conteudo>
+                        <input-container-component titulo="ID">
+                            <input type="text" class="form-control" readonly :value="$store.state.item.id">
+                        </input-container-component>
+                        <input-container-component titulo="Placa">
+                            <input type="text" class="form-control" readonly :value="$store.state.item.placa">
+                        </input-container-component>
+                    </template>
+                    <template v-slot:rodape>
+                        <div class="btnDeletar">
+                            <button type="button" class="btn btn-secondary m-1" data-bs-dismiss="modal">Fechar</button>
+                            <button type="button" class="btn btn-danger m-1"
+                                @click="deletar($store.state.item)">Deletar</button>
+                        </div>
+                    </template>
+                </modal-component>
+                <!-- Fim do modal de exclusão de carro -->
             </div>
         </div>
     </div>
@@ -196,10 +300,63 @@
                         swal("Erro!", `Ocorreu o seguinte erro: ${errors.response}.`, "error");
                     })
             },
+            editar() {
+                let formData = new FormData();
+                formData.append('_method', 'patch')
+                formData.append('modelo_id', this.$store.state.item.modelo_id);
+                formData.append('placa', this.$store.state.item.placa);
+                formData.append('disponivel', this.$store.state.item.disponivel);
+                formData.append('km', this.$store.state.item.km);
+
+                let url = this.urlBase + '/' + this.$store.state.item.id
+
+                console.log(url)
+                axios.post(url, formData)
+                    .then(response => {
+                        swal("Sucesso!", `Carro ${this.$store.state.item.placa} editado com sucesso!`, "success");
+                        this.carregarCarros()
+                    })
+                    .catch(errors => {
+                        swal("Erro!", `Ocorreu um erro: erro ${errors.response.data.message}`, "error");
+                        console.log(errors.response)
+                    })
+            },
+            deletar(item) {
+            swal({
+                title: "Você tem certeza?",
+                text: `Ao confirmar o exclusão, todos os dados do carro placa: ${item.placa} serão removidos permanentimente da base de dados.`,
+                icon: "warning",
+                buttons: ["Cancelar", "Deletar"],
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        // criando url para delete
+                        let url = this.urlBase + '/' + this.$store.state.item.id
+                        // criando uma instância de forData e passando o metodo para delete
+                        let formData = new FormData();
+                        formData.append('_method', 'delete');
+
+                        axios.post(url, formData)
+                            .then(response => {
+                                swal(`Carro placa: ${item.placa} foi removida com sucesso!`, {
+                                    icon: "success",
+                                });
+                                this. carregarCarros()
+                            })
+                            .catch(errors => {
+                                swal(`Erro, verifique se o carro ${item.placa} está alugado.`, {
+                                    icon: "error",
+                                });
+                                console.log(errors)
+                            })
+                    }
+                });
+            }
         },
         mounted() {
-        this.carregarCarros()
-        this.carregarDadosModelos()
+            this.carregarCarros()
+            this.carregarDadosModelos()
         }
     }
 </script>

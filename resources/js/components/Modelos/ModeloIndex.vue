@@ -381,7 +381,8 @@ export default {
                     this.carregarModelos()
                 })
                 .catch(errors => {
-                    swal("Erro!", `Ocorreu o seguinte erro: ${errors.response}.`, "error");
+                    swal("Erro!", `Ocorreu o seguinte erro: ${errors.response.data.message}.`, "error");
+                    // console.log(errors.response.data.message)
                 })
         },
         editar() {
@@ -412,7 +413,7 @@ export default {
                     this.carregarModelos()
                 })
                 .catch(errors => {
-                    swal("Erro!", `Ocorreu um erro no cadastro da marca: erro ${errors.response.data.message}`, "error");
+                    swal("Erro!", `Ocorreu um erro na edição do modelo: erro ${errors.response.data.message}`, "error");
                     console.log(errors.response)
                 })
         },
