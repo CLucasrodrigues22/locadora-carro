@@ -16,5 +16,3 @@
 - php artisan serve
 
 > A ser melhorado:
-
-- Bug ao tentar atualizar dados de um carro, os campos "Disponivel" e "KM" não estão dando para editar, pois pelo front-end, a aplicação está entendendo como um cadastro de um novo objeto, e a placa é unica.
