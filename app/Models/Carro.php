@@ -13,7 +13,7 @@ class Carro extends Model
     public function rules() {
         return [
             'modelo_id' => 'exists:modelos,id',
-            'placa' => 'required|unique:carros,placa',
+            'placa' => 'required|unique:carros,placa,'.$this->id,
             'disponivel' => 'required',
             'km' => 'required'
         ];
@@ -21,7 +21,7 @@ class Carro extends Model
     
     public function feedback() {
         return [
-            'unique' => 'Já existe um modelo cadastrado com essa placa',
+            'placa.unique' => 'Já existe um modelo cadastrado com essa placa',
             'required' => 'O campo :attribute é obrigatório'
         ];
     }

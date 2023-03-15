@@ -103,23 +103,21 @@ class CarroController extends Controller
             return response()->json(['erro' => 'Impossível realizar a atualização. O carro solicitado não existe'], 404);
         }
 
-        if($request->method() === 'PATCH') {
+        if ($request->method() === 'PATCH') {
 
             $regrasDinamicas = array();
 
             //percorrendo todas as regras definidas no Model
-            foreach($carro->rules() as $input => $regra) {
-                
+            foreach ($carro->rules() as $input => $regra) {
+
                 //coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
-                if(array_key_exists($input, $request->all())) {
+                if (array_key_exists($input, $request->all())) {
                     $regrasDinamicas[$input] = $regra;
                 }
             }
-            
-            $request->validate($regrasDinamicas, $carro->feedback());
-
+            $request->validate($regrasDinamicas);
         } else {
-            $request->validate($carro->rules(), $carro->feedback());
+            $request->validate($carro->rules());
         }
 
         $carro->fill($request->all());

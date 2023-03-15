@@ -302,7 +302,7 @@
             },
             editar() {
                 let formData = new FormData();
-                formData.append('_method', 'patch')
+                formData.append('_method', 'patch');
                 formData.append('modelo_id', this.$store.state.item.modelo_id);
                 formData.append('placa', this.$store.state.item.placa);
                 formData.append('disponivel', this.$store.state.item.disponivel);
@@ -310,25 +310,23 @@
 
                 let url = this.urlBase + '/' + this.$store.state.item.id
 
-                console.log(url)
                 axios.post(url, formData)
                     .then(response => {
-                        swal("Sucesso!", `Carro ${this.$store.state.item.placa} editado com sucesso!`, "success");
+                        swal("Sucesso!", `Carro editado com sucesso!`, "success");
                         this.carregarCarros()
                     })
                     .catch(errors => {
-                        swal("Erro!", `Ocorreu um erro: erro ${errors.response.data.message}`, "error");
-                        console.log(errors.response)
+                        swal("Erro!", `Ocorreu um erro na edição: ${errors.response.data.message}`, "error");
                     })
             },
             deletar(item) {
-            swal({
-                title: "Você tem certeza?",
-                text: `Ao confirmar o exclusão, todos os dados do carro placa: ${item.placa} serão removidos permanentimente da base de dados.`,
-                icon: "warning",
-                buttons: ["Cancelar", "Deletar"],
-                dangerMode: true,
-            })
+                swal({
+                    title: "Você tem certeza?",
+                    text: `Ao confirmar o exclusão, todos os dados do carro placa: ${item.placa} serão removidos permanentimente da base de dados.`,
+                    icon: "warning",
+                    buttons: ["Cancelar", "Deletar"],
+                    dangerMode: true,
+                })
                 .then((willDelete) => {
                     if (willDelete) {
                         // criando url para delete
