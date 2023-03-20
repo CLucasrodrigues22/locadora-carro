@@ -37,6 +37,8 @@ import Pagination from './components/Pagination.vue';
 import MarcaIndex from './components/Marcas/MarcaIndex.vue';
 import ModeloIndex from './components/Modelos/ModeloIndex.vue';
 import CarroIndex from './components/Carros/CarroIndex.vue';
+import ClienteIndex from './components/Clientes/ClienteIndex.vue';
+import LocacoesIndex from './components/Locacoes/LocacoesIndex.vue';
 
 // servir componentes globais
 app.component('login-component', Login);
@@ -51,7 +53,8 @@ app.component('pagination-component', Pagination);
 app.component('marcaindex-component', MarcaIndex);
 app.component('modeloindex-component', ModeloIndex);
 app.component('carroindex-component', CarroIndex);
-
+app.component('clienteindex-component', ClienteIndex);
+app.component('locacoesindex-component', LocacoesIndex);
 // filtro de formatação de data global
 app.config.globalProperties.$filters = {
     formataDataTempo(d) {
@@ -85,6 +88,6 @@ app.config.globalProperties.$filters = {
  * Finally, we will attach the application instance to a HTML element with
  * an "id" attribute of "app". This element is included with the "auth"
  * scaffolding. Otherwise, you will need to add an element yourself.
- */
+*/
 
 app.mount('#app');

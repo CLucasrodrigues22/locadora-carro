@@ -31,3 +31,9 @@ Route::get('/modelos', function() {
 Route::get('/carros', function() {
     return view('app.carros.carros');
 })->name('carros')->middleware('auth');
+Route::get('/clientes', function() {
+    return view('app.clientes.clientes');
+})->name('clientes')->middleware('auth');
+Route::get('/locacoes', function() {
+    return view('app.locacoes.locacoes');
+})->name('locacoes')->middleware('auth');

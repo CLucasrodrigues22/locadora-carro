@@ -171,153 +171,153 @@
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            urlBase: 'http://127.0.0.1:8000/api/v1/marca',
-            urlPaginacao: '',
-            urlFiltro: '',
-            novaMarca: '',
-            imagemMarca: [],
-            feedbackStatus: '',
-            feedbackMessage: [],
-            marcas: {
-                data: []
-            },
-            modelos: {
-            },
-            busca: { id: '', nome: '' }
-        }
-    },
-    methods: {
-        pesquisar() {
-            let filtro = ''
+    export default {
+        data() {
+            return {
+                urlBase: 'http://127.0.0.1:8000/api/v1/marca',
+                urlPaginacao: '',
+                urlFiltro: '',
+                novaMarca: '',
+                imagemMarca: [],
+                feedbackStatus: '',
+                feedbackMessage: [],
+                marcas: {
+                    data: []
+                },
+                modelos: {
+                },
+                busca: { id: '', nome: '' }
+            }
+        },
+        methods: {
+            pesquisar() {
+                let filtro = ''
 
-            for (let chave in this.busca) {
-                if (this.busca[chave]) {
-                    if (filtro != '') {
-                        filtro += ";"
+                for (let chave in this.busca) {
+                    if (this.busca[chave]) {
+                        if (filtro != '') {
+                            filtro += ";"
+                        }
+
+                        filtro += chave + ':like:' + this.busca[chave];
                     }
-
-                    filtro += chave + ':like:' + this.busca[chave];
                 }
-            }
-            if (filtro != '') {
-                this.urlPaginacao = 'page=1';
-                this.urlFiltro = '&filtro=' + filtro;
-            } else {
-                this.urlFiltro = ''
-            }
-            this.carregarMarcas()
-        },
-        paginacao(li) {
-            if (li.url) {
-                this.urlPaginacao = li.url.split('?')[1];
-                this.carregarMarcas() // requisitando novamente os dados para nossa API com base na URL atualizada
-            }
-        },
-        carregarMarcas() {
-            let url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro;
-            axios.get(url)
-                .then(response => {
-                    this.marcas = response.data
-                })
-                .catch(errors => {
-                    console.log(errors)
-                })
-        },
-        carregarImagem(e) {
-            this.imagemMarca = e.target.files
-        },
-        salvar() {
-            //console.log(this.novaMarca, this.imagemMarca[0])
-            // instanciando um formulário para definir os atributos
-            let formData = new FormData();
-            formData.append('nome', this.novaMarca);
-            formData.append('imagem', this.imagemMarca[0]);
-
-            // cabeçalhos da requisição
-            let cfg = {
-                headres: {
-                    'Content-Type': 'multipart/form-data',
+                if (filtro != '') {
+                    this.urlPaginacao = 'page=1';
+                    this.urlFiltro = '&filtro=' + filtro;
+                } else {
+                    this.urlFiltro = ''
                 }
-            }
-
-            // enviando atributos para a requisição post para que seja salvo no back-end
-            axios.post(this.urlBase, formData, cfg)
-                .then(response => {
-                    swal("Sucesso!", `Marca ${this.novaMarca} cadastrada com sucesso!`, "success");
-                    this.feedbackStatus = 'sucesso'
-                    this.feedbackMessage = response
-                    this.carregarMarcas()
-                })
-                .catch(errors => {
-                    this.feedbackStatus = 'erro'
-                    this.feedbackMessage = errors.response
-                })
-        },
-        deletar(item) {
-            swal({
-                title: "Você tem certeza?",
-                text: `Ao confirmar o exclusão, todos os dados de ${item.nome} serão removidos permanentimente da base de dados.`,
-                icon: "warning",
-                buttons: ["Cancelar", "Deletar"],
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        // criando url para delete
-                        let url = this.urlBase + '/' + this.$store.state.item.id
-                        // criando uma instância de forData e passando o metodo para delete
-                        let formData = new FormData();
-                        formData.append('_method', 'delete');
-
-                        axios.post(url, formData)
-                            .then(response => {
-                                swal(`A marca ${item.nome} foi removida com sucesso!`, {
-                                    icon: "success",
-                                });
-                                this.carregarMarcas()
-                            })
-                            .catch(errors => {
-                                swal(`Existem modelos associados a marca ${item.nome} no banco de dados.`, {
-                                    icon: "error",
-                                });
-                                console.log(errors)
-                            })
-                    }
-                });
-        },
-        editar() {
+                this.carregarMarcas()
+            },
+            paginacao(li) {
+                if (li.url) {
+                    this.urlPaginacao = li.url.split('?')[1];
+                    this.carregarMarcas() // requisitando novamente os dados para nossa API com base na URL atualizada
+                }
+            },
+            carregarMarcas() {
+                let url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro;
+                axios.get(url)
+                    .then(response => {
+                        this.marcas = response.data
+                    })
+                    .catch(errors => {
+                        console.log(errors)
+                    })
+            },
+            carregarImagem(e) {
+                this.imagemMarca = e.target.files
+            },
+            salvar() {
+                //console.log(this.novaMarca, this.imagemMarca[0])
+                // instanciando um formulário para definir os atributos
                 let formData = new FormData();
-                formData.append('_method', 'patch')
-                formData.append('nome', this.$store.state.item.nome)
-                if(this.imagemMarca[0]) {
-                    formData.append('imagem', this.imagemMarca[0])
-                }
+                formData.append('nome', this.novaMarca);
+                formData.append('imagem', this.imagemMarca[0]);
 
-                let url = this.urlBase + '/' + this.$store.state.item.id
-
+                // cabeçalhos da requisição
                 let cfg = {
-                    headers: {
+                    headres: {
                         'Content-Type': 'multipart/form-data',
                     }
                 }
 
-                axios.post(url, formData, cfg)
+                // enviando atributos para a requisição post para que seja salvo no back-end
+                axios.post(this.urlBase, formData, cfg)
                     .then(response => {
-                        swal("Sucesso!", `Marca ${this.$store.state.item.nome} editada com sucesso!`, "success");
-                        atualizarImagem.value = ''
+                        swal("Sucesso!", `Marca ${this.novaMarca} cadastrada com sucesso!`, "success");
+                        this.feedbackStatus = 'sucesso'
+                        this.feedbackMessage = response
                         this.carregarMarcas()
                     })
                     .catch(errors => {
-                        swal("Erro!", `Ocorreu um erro na edição da marca: erro ${errors.response.data.message}`, "error");
-                        console.log(errors.response)
+                        this.feedbackStatus = 'erro'
+                        this.feedbackMessage = errors.response
                     })
+            },
+            deletar(item) {
+                swal({
+                    title: "Você tem certeza?",
+                    text: `Ao confirmar o exclusão, todos os dados de ${item.nome} serão removidos permanentimente da base de dados.`,
+                    icon: "warning",
+                    buttons: ["Cancelar", "Deletar"],
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            // criando url para delete
+                            let url = this.urlBase + '/' + this.$store.state.item.id
+                            // criando uma instância de forData e passando o metodo para delete
+                            let formData = new FormData();
+                            formData.append('_method', 'delete');
+
+                            axios.post(url, formData)
+                                .then(response => {
+                                    swal(`A marca ${item.nome} foi removida com sucesso!`, {
+                                        icon: "success",
+                                    });
+                                    this.carregarMarcas()
+                                })
+                                .catch(errors => {
+                                    swal(`Existem modelos associados a marca ${item.nome} no banco de dados.`, {
+                                        icon: "error",
+                                    });
+                                    console.log(errors)
+                                })
+                        }
+                    });
+            },
+            editar() {
+                    let formData = new FormData();
+                    formData.append('_method', 'patch')
+                    formData.append('nome', this.$store.state.item.nome)
+                    if(this.imagemMarca[0]) {
+                        formData.append('imagem', this.imagemMarca[0])
+                    }
+
+                    let url = this.urlBase + '/' + this.$store.state.item.id
+
+                    let cfg = {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    }
+
+                    axios.post(url, formData, cfg)
+                        .then(response => {
+                            swal("Sucesso!", `Marca ${this.$store.state.item.nome} editada com sucesso!`, "success");
+                            atualizarImagem.value = ''
+                            this.carregarMarcas()
+                        })
+                        .catch(errors => {
+                            swal("Erro!", `Ocorreu um erro na edição da marca: erro ${errors.response.data.message}`, "error");
+                            console.log(errors.response)
+                        })
+            }
+        },
+        mounted() {
+            this.carregarMarcas()
         }
-    },
-    mounted() {
-        this.carregarMarcas()
     }
-}
 </script>

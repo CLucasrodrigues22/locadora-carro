@@ -26,14 +26,6 @@ class ClienteController extends Controller
     {
         $clienteRepository = new ClienteRepository($this->cliente);
 
-        // condição caso exista o atributo atributos_marca na url
-        // if ($request->has('atributos_locacoes')) {
-        //     $atributos_locacoes = 'locacoes:id,' . $request->atributos_locacoes;
-        //     $clienteRepository->selectAtributosRegistrosRelacionados($atributos_locacoes);
-        // } else {
-        //     $clienteRepository->selectAtributosRegistrosRelacionados('locacoes');
-        // }
-
         // filtro multiplo
         if ($request->has('filtro')) {
             $clienteRepository->filtro($request->filtro);
@@ -44,7 +36,12 @@ class ClienteController extends Controller
             $clienteRepository->selectAtributos($request->atributos);
         }
 
-        return response()->json($clienteRepository->getResultado(), 200);
+        // condição caso exista o atributo atributos na url
+        if ($request->has('all')) {
+            return response()->json($clienteRepository->getResultado(), 200);
+        } else {
+            return response()->json($clienteRepository->getResultadoPaginado(5), 200);
+        }
     }
 
     /**

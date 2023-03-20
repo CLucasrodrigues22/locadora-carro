@@ -10,21 +10,22 @@
                                 <input-container-component titulo="ID" id="inputId" id-help="idHelp"
                                     texto-ajuda="(Opcional) Informe o ID do Carro">
                                     <input type="number" class="form-control" id="inputId" aria-describedby="idHelp"
-                                        placeholder="ID">
+                                        placeholder="ID" v-model="busca.id">
                                 </input-container-component>
                             </div>
                             <div class="col mb-3">
                                 <input-container-component titulo="Placa do Carro" id="inputPlaca" id-help="placaHelp"
                                     texto-ajuda="(Opcional) Informe a placa do Carro">
                                     <input type="text" class="form-control" id="inputPlaca" aria-describedby="placaHelp"
-                                        placeholder="AAA-0000">
+                                        placeholder="AAA-0000" v-model="busca.placa">
                                 </input-container-component>
                             </div>
                         </div>
                     </template>
 
                     <template v-slot:rodape>
-                        <button type="submit" class="btn btn-primary btn-sm float-left">Pesquisar</button>
+                        <button type="submit" class="btn btn-primary btn-sm float-left"
+                            @click="pesquisar()">Pesquisar</button>
                     </template>
                 </card-component>
                 <!-- Fim do card de busca de carros -->
@@ -32,7 +33,8 @@
                 <!-- Card de Listagem de carros -->
                 <card-component titulo="Relação de Carros">
                     <template v-slot:conteudo>
-                        <table-component :dados="carros.data" :visualizar="{
+                        <table-component :dados="carros.data" 
+                            :visualizar="{
                             visivel: true,
                             dataToggle: 'modal',
                             dataTarget: '#modalCarroVisualizar'
@@ -245,6 +247,26 @@
             }
         },
         methods: {
+            pesquisar() {
+                let filtro = ''
+
+                for (let chave in this.busca) {
+                    if (this.busca[chave]) {
+                        if (filtro != '') {
+                            filtro += ";"
+                        }
+
+                        filtro += chave + ':like:' + this.busca[chave];
+                    }
+                }
+                if (filtro != '') {
+                    this.urlPaginacao = 'page=1';
+                    this.urlFiltro = '&filtro=' + filtro;
+                } else {
+                    this.urlFiltro = ''
+                }
+                this.carregarCarros()
+            },
             paginacao(li) {
                 if (li.url) {
                     this.urlPaginacao = li.url.split('?')[1];
@@ -283,15 +305,8 @@
                 formData.append('disponivel', this.disponivel);
                 formData.append('km', this.kmCarro);
 
-                // cabeçalhos da requisição
-                let cfg = {
-                    headres: {
-                        'Content-Type': 'multipart/form-data',
-                    }
-                }
-
                 // enviando atributos para a requisição post para que seja salvo no back-end
-                axios.post(this.urlBase, formData, cfg)
+                axios.post(this.urlBase, formData)
                     .then(response => {
                         swal("Sucesso!", `Carro ${this.placa} cadastrado com sucesso!`, "success");
                         this.carregarCarros()

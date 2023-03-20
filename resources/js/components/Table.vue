@@ -52,7 +52,6 @@
                 let campos = Object.keys(this.titulos)
                 // array a ser preenchido com cada objeto
                 let dadosFiltrados = []
-
                 // percorrar o array atribuido a props 'dados'
                 this.dados.map((item, chave) => {
 
@@ -63,7 +62,7 @@
                     })
                     dadosFiltrados.push(itemFiltrado)
                 })
-
+                console.log(dadosFiltrados)
                 return dadosFiltrados //retorne um array de objetos 
             }
         }
