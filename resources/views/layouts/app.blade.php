@@ -57,8 +57,8 @@
                   Locações
                 </a>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="{{ route('locacoes') }}">Lista de Locações</a></li>
                   <li><a class="dropdown-item" href="{{ route('clientes') }}">Lista de Clientes</a></li>
+                  <li><a class="dropdown-item" href="{{ route('locacoes') }}">Lista de Locações</a></li>
                 </ul>
               </li>
             </ul>

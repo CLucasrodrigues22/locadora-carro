@@ -71,6 +71,12 @@ app.config.globalProperties.$filters = {
     
         return tempo + ' - ' + data
     },
+    formataDinheiro(d) {
+        if (!d) return "";
+        
+        let valor =  d.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+        return valor
+    }
 },
 /**
  * The following block of code may be used to automatically register your

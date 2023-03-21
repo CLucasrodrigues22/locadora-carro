@@ -14,7 +14,11 @@
                         <span v-if="titulos[chaveValor].tipo == 'data'">
                             {{ $filters.formataDataTempo(valor) }}
                         </span>
+                        <span v-if="titulos[chaveValor].tipo == 'dinheiro'">
+                            {{ $filters.formataDinheiro(valor) }}
+                        </span>
                         <span v-if="titulos[chaveValor].tipo == 'array'">{{valor.nome}}</span>
+                        <span v-if="titulos[chaveValor].tipo == 'attr'">{{valor.placa}}</span>
                         <span v-if="titulos[chaveValor].tipo == 'imagem'">
                             <img :src="'/storage/'+valor" width="50" height="50">
                         </span>

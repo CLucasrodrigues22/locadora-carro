@@ -13,7 +13,7 @@ class AbstractRepository {
         $this->model = $model;
     }
 
-    public function selectAtributosRegistrosRelacionados($atributos) {
+    public function selectAtributosRegistrosRelacionados(...$atributos) {
         $this->model = $this->model->with($atributos);
         //a query está sendo montada
     }

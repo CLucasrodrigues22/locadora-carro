@@ -23,10 +23,12 @@ class LocacaoController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
+    */
     public function index(Request $request)
     {
         $locacaoRepository = new LocacaoRepository($this->locacao);
+
+        $locacaoRepository->selectAtributosRegistrosRelacionados('cliente', 'carro');
 
         if($request->has('filtro')) {
             $locacaoRepository->filtro($request->filtro);
@@ -36,7 +38,12 @@ class LocacaoController extends Controller
             $locacaoRepository->selectAtributos($request->atributos);
         } 
 
-        return response()->json($locacaoRepository->getResultado(), 200);
+        // condição caso exista o atributo 'atributos' na url
+        if ($request->has('all')) {
+            return response()->json($locacaoRepository->getResultado(), 200);
+        } else {
+            return response()->json($locacaoRepository->getResultadoPaginado(5), 200);
+        }
     }
 
     /**
@@ -44,7 +51,7 @@ class LocacaoController extends Controller
      *
      * @param  \App\Http\Requests\StoreLocacaoRequest  $request
      * @return \Illuminate\Http\Response
-     */
+    */
     public function store(StoreLocacaoRequest $request)
     {
         $request->validate($this->locacao->rules());

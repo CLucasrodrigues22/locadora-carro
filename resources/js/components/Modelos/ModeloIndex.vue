@@ -35,8 +35,7 @@
                         <table-component :dados="modelos.data" :visualizar="{
                             visivel: true,
                             dataToggle: 'modal',
-                            dataTarget: '#modalModeloVisualizar',
-                            dadosVisivel: modelos.data
+                            dataTarget: '#modalModeloVisualizar',                        
                         }" :editar="{
                             visivel: true,
                             dataToggle: 'modal',

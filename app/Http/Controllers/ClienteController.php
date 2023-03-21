@@ -21,7 +21,7 @@ class ClienteController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
+    */
     public function index(Request $request)
     {
         $clienteRepository = new ClienteRepository($this->cliente);
@@ -49,7 +49,7 @@ class ClienteController extends Controller
      *
      * @param  \App\Http\Requests\StoreClienteRequest  $request
      * @return \Illuminate\Http\Response
-     */
+    */
     public function store(StoreClienteRequest $request)
     {
         $request->validate($this->cliente->rules(), $this->cliente->feedback());
@@ -82,7 +82,7 @@ class ClienteController extends Controller
      * @param  \App\Http\Requests\UpdateClienteRequest  $request
      * @param  Integer
      * @return \Illuminate\Http\Response
-     */
+    */
     public function update(UpdateClienteRequest $request, $id)
     {
         $cliente = $this->cliente->find($id);

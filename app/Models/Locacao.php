@@ -40,4 +40,14 @@ class Locacao extends Model
             'required' => 'O campo :attribute é obrigatório'
         ];
     }
+
+    public function cliente() {
+        //UM cliente PERTENCE a UMA locacao
+        return $this->belongsTo('App\Models\Cliente');
+    }
+
+    public function carro() {
+        //UM carro PERTENCE a UMA locacao
+        return $this->belongsTo('App\Models\Carro');
+    }
 }
