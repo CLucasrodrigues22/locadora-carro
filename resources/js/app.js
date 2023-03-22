@@ -55,6 +55,7 @@ app.component('modeloindex-component', ModeloIndex);
 app.component('carroindex-component', CarroIndex);
 app.component('clienteindex-component', ClienteIndex);
 app.component('locacoesindex-component', LocacoesIndex);
+
 // filtro de formatação de data global
 app.config.globalProperties.$filters = {
     formataDataTempo(d) {

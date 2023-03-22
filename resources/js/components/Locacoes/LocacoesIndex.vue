@@ -5,7 +5,8 @@
                 <!-- Card de Listagem de locações -->
                 <card-component titulo="Relação de Locações">
                     <template v-slot:conteudo>
-                        <table-component :dados="locacoes.data" 
+                        <table-component 
+                            :dados="locacoes.data" 
                             :visualizar="{
                             visivel: true,
                             dataToggle: 'modal',
@@ -17,7 +18,7 @@
                             }" :deletar="{
                                 dataToggle: 'modal',
                                 dataTarget: '#modalLocacoesDeletar',
-                                visivel: true
+                                visivel: false
                             }" :titulos="{
                                 id: { titulo: 'ID', tipo: 'texto' },
                                 cliente: { titulo: 'Cliente', tipo: 'array' },
@@ -90,7 +91,49 @@
                         <button type="button" class="btn btn-primary" @click="salvar()">Salvar Modelo</button>
                     </template>
                 </modal-component>
-                <!-- Fim do modal de cadastro de modelo -->
+                <!-- Fim do modal de cadastro de locação -->
+
+                <!-- Modal de vizualização de locação -->
+                <modal-component id="modalLocacoesVisualizar" titulo="Dados do Modelo">
+                    <template v-slot:conteudo>
+                        <ol class="list-group list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">ID da Locação</div>
+                                    {{ $store.state.item.id }}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Início do Aluguel</div>
+                                    {{ $store.state.item.data_inicio_periodo }}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Data para devolução (previsão)</div>
+                                    {{ $store.state.item.data_final_previsto_periodo }}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">Valor total do Aluguel</div>
+                                    {{ $filters.formataDinheiro($store.state.item.valor_diaria) }}
+                                </div>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div class="ms-2 me-auto">
+                                    <div class="fw-bold">KM inicial do carro</div>
+                                    {{ $store.state.item.km_inicial }}
+                                </div>
+                            </li>
+                        </ol>
+                    </template>
+                    <template v-slot:rodape>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    </template>
+                </modal-component>
+                <!-- Fim do modal de vizualização de modelo -->
             </div>
         </div>
     </div>
@@ -153,7 +196,6 @@
                             var dadosClientes = [valorAtual.id, valorAtual.nome];
                             this.clientes.data.push(dadosClientes)
                         })
-                        console.log(this.clientes)
                     })
                     .catch(errors => {
                         console.log(errors)

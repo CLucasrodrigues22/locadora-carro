@@ -16,3 +16,5 @@
 - php artisan serve
 
 > A ser melhorado:
+
+- adicionar migration e metodos para finalização de locação
