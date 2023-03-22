@@ -12,3 +12,4 @@
 > A ser melhorado:
 
 - adicionar migration e metodos para finalização de locação
+- adicionar gráficos na dashboard
