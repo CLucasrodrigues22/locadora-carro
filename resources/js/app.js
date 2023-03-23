@@ -7,7 +7,7 @@
 import './bootstrap';
 import '../css/app.css';
 import { createApp } from 'vue';
-import { createStore } from 'vuex'
+import { createStore } from 'vuex';
 
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
