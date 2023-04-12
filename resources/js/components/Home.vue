@@ -36,8 +36,14 @@
                 },
                 chartOptions: {
                     responsive: true
+                },
+                options: {
+                    'title':'My Big Pie Chart',
                 }
             }
+        },
+        mounted() {
+            this.renderChart(data, options);
         }
     }
 </script>
