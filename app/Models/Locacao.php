@@ -12,12 +12,14 @@ class Locacao extends Model
     protected $fillable = [
         'cliente_id',
         'carro_id',
+        'status_id',
         'data_inicio_periodo',
         'data_final_previsto_periodo',
         'data_final_realizado_periodo',
         'valor_diaria',
         'km_inicial',
-        'km_final'
+        'km_final',
+        'km_percorrido'
     ];
 
     public function rules()
@@ -27,10 +29,8 @@ class Locacao extends Model
             'carro_id' => 'required',
             'data_inicio_periodo' => 'required',
             'data_final_previsto_periodo' => 'required',
-            'data_final_realizado_periodo' => 'required',
             'valor_diaria' => 'required',
-            'km_inicial' => 'required',
-            'km_final' => 'required'
+            'km_inicial' => 'required'
         ];
     }
 
@@ -41,13 +41,21 @@ class Locacao extends Model
         ];
     }
 
-    public function cliente() {
+    public function cliente()
+    {
         //UM cliente PERTENCE a UMA locacao
         return $this->belongsTo('App\Models\Cliente');
     }
 
-    public function carro() {
+    public function carro()
+    {
         //UM carro PERTENCE a UMA locacao
         return $this->belongsTo('App\Models\Carro');
+    }
+
+    public function status()
+    {
+        //UM status PERTENCE a UMA locacao
+        return $this->belongsTo('App\Models\Status');
     }
 }

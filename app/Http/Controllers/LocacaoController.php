@@ -23,20 +23,20 @@ class LocacaoController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-    */
+     */
     public function index(Request $request)
     {
         $locacaoRepository = new LocacaoRepository($this->locacao);
 
-        $locacaoRepository->selectAtributosRegistrosRelacionados('cliente', 'carro');
+        $locacaoRepository->selectAtributosRegistrosRelacionados('cliente', 'carro', 'status');
 
-        if($request->has('filtro')) {
+        if ($request->has('filtro')) {
             $locacaoRepository->filtro($request->filtro);
         }
 
-        if($request->has('atributos')) {
+        if ($request->has('atributos')) {
             $locacaoRepository->selectAtributos($request->atributos);
-        } 
+        }
 
         // condição caso exista o atributo 'atributos' na url
         if ($request->has('all')) {
@@ -51,7 +51,7 @@ class LocacaoController extends Controller
      *
      * @param  \App\Http\Requests\StoreLocacaoRequest  $request
      * @return \Illuminate\Http\Response
-    */
+     */
     public function store(StoreLocacaoRequest $request)
     {
         $request->validate($this->locacao->rules());
@@ -59,12 +59,11 @@ class LocacaoController extends Controller
         $locacao = $this->locacao->create([
             'cliente_id' => $request->cliente_id,
             'carro_id' => $request->carro_id,
+            'status_id' => 1,
             'data_inicio_periodo' => $request->data_inicio_periodo,
             'data_final_previsto_periodo' => $request->data_final_previsto_periodo,
-            'data_final_realizado_periodo' => $request->data_final_realizado_periodo,
             'valor_diaria' => $request->valor_diaria,
-            'km_inicial' => $request->km_inicial,
-            'km_final' => $request->km_final
+            'km_inicial' => $request->km_inicial
         ]);
 
         return response()->json($locacao, 201);
@@ -79,9 +78,9 @@ class LocacaoController extends Controller
     public function show($id)
     {
         $locacao = $this->locacao->find($id);
-        if($locacao === null) {
-            return response()->json(['erro' => 'Locação pesquisada não existe'], 404) ;
-        } 
+        if ($locacao === null) {
+            return response()->json(['erro' => 'Locação pesquisada não existe'], 404);
+        }
 
         return response()->json($locacao, 200);
     }
@@ -97,32 +96,30 @@ class LocacaoController extends Controller
     {
         $locacao = $this->locacao->find($id);
 
-        if($locacao === null) {
+        if ($locacao === null) {
             return response()->json(['erro' => 'Impossível realizar a atualização. A locação solicitado não existe'], 404);
         }
 
-        if($request->method() === 'PATCH') {
+        if ($request->method() === 'PATCH') {
 
             $regrasDinamicas = array();
 
             //percorrendo todas as regras definidas no Model
-            foreach($locacao->rules() as $input => $regra) {
-                
+            foreach ($locacao->rules() as $input => $regra) {
+
                 //coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
-                if(array_key_exists($input, $request->all())) {
+                if (array_key_exists($input, $request->all())) {
                     $regrasDinamicas[$input] = $regra;
                 }
             }
-            
-            $request->validate($regrasDinamicas);
 
+            $request->validate($regrasDinamicas);
         } else {
             $request->validate($locacao->rules());
         }
-        
+
         $locacao->fill($request->all());
         $locacao->save();
-        
         return response()->json($locacao, 200);
     }
 
@@ -136,7 +133,7 @@ class LocacaoController extends Controller
     {
         $locacao = $this->locacao->find($id);
 
-        if($locacao === null) {
+        if ($locacao === null) {
             return response()->json(['erro' => 'Impossível realizar a exclusão. A locação solicitado não existe'], 404);
         }
 

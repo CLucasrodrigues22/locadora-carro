@@ -35,21 +35,25 @@
                         <table-component :dados="modelos.data" :visualizar="{
                             visivel: true,
                             dataToggle: 'modal',
-                            dataTarget: '#modalModeloVisualizar',                        
+                            dataTarget: '#modalModeloVisualizar',
                         }" :editar="{
-                            visivel: true,
-                            dataToggle: 'modal',
-                            dataTarget: '#modalModeloEditar'
-                        }" :deletar="{
-                            dataToggle: 'modal',
-                            dataTarget: '#modalModeloDeletar',
-                            visivel: true
-                        }" :titulos="{
-                            id: { titulo: 'ID', tipo: 'texto' },
-                            nome: { titulo: 'Nome', tipo: 'texto' },
-                            created_at: { titulo: 'Data de Criação', tipo: 'data' },
-                            marca: { titulo: 'Marca', tipo: 'array' },
-                        }">
+    visivel: true,
+    dataToggle: 'modal',
+    dataTarget: '#modalModeloEditar'
+}" :finalizar="{
+    dataToggle: 'modal',
+    dataTarget: '#modalLocacoesFinalizar',
+    visivel: false
+}" :deletar="{
+    dataToggle: 'modal',
+    dataTarget: '#modalModeloDeletar',
+    visivel: true
+}" :titulos="{
+    id: { titulo: 'ID', tipo: 'texto' },
+    nome: { titulo: 'Nome', tipo: 'texto' },
+    created_at: { titulo: 'Data de Criação', tipo: 'data' },
+    marca: { titulo: 'Marca', tipo: 'array' },
+}">
                         </table-component>
                     </template>
 
@@ -254,15 +258,18 @@
                             <option value="0">Não</option>
                         </select>
                     </input-container-component>
-                    <input-container-component titulo="Imagem" id="atualizarImagem" id-help="atualizarImagemHelp" texto-ajuda="Selecione uma imagem no formato PNG">
-                        <input type="file" class="form-control" id="atualizarImagem" aria-describedby="atualizarImagemHelp" placeholder="Selecione uma imagem" @change="carregarImagem($event)">
+                    <input-container-component titulo="Imagem" id="atualizarImagem" id-help="atualizarImagemHelp"
+                        texto-ajuda="Selecione uma imagem no formato PNG">
+                        <input type="file" class="form-control" id="atualizarImagem" aria-describedby="atualizarImagemHelp"
+                            placeholder="Selecione uma imagem" @change="carregarImagem($event)">
                     </input-container-component>
                 </div>
             </template>
             <template v-slot:rodape>
                 <div class="btnModalModelo">
                     <button type="button" class="btn btn-secondary m-1" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary m-1" @click="editar($store.state.item)">Salvar Alteração</button>
+                    <button type="button" class="btn btn-primary m-1" @click="editar($store.state.item)">Salvar
+                        Alteração</button>
                 </div>
             </template>
         </modal-component>
@@ -393,8 +400,8 @@ export default {
             formData.append('lugares', this.$store.state.item.lugares);
             formData.append('air_bag', this.$store.state.item.air_bag);
             formData.append('abs', this.$store.state.item.abs);
-            if(this.imagemModelo[0]) {
-                    formData.append('imagem', this.imagemModelo[0])
+            if (this.imagemModelo[0]) {
+                formData.append('imagem', this.imagemModelo[0])
             }
 
             let url = this.urlBase + '/' + this.$store.state.item.id
@@ -437,7 +444,7 @@ export default {
                                 swal(`O modelo ${item.nome} foi removida com sucesso!`, {
                                     icon: "success",
                                 });
-                                this. carregarModelos()
+                                this.carregarModelos()
                             })
                             .catch(errors => {
                                 swal(`Erro, verifique se existe algum carro com relação ao modelo ${item.nome}.`, {

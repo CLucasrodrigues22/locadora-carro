@@ -16,8 +16,8 @@
                             <div class="col mb-3">
                                 <input-container-component titulo="Nome do Cliente" id="inputNomeCliente" id-help="nomeHelp"
                                     texto-ajuda="(Opcional) Informe o nome do cliente">
-                                    <input type="text" class="form-control" id="inputNomeCliente" aria-describedby="nomeHelp"
-                                        placeholder="Nome do Cliente" v-model="busca.nome">
+                                    <input type="text" class="form-control" id="inputNomeCliente"
+                                        aria-describedby="nomeHelp" placeholder="Nome do Cliente" v-model="busca.nome">
                                 </input-container-component>
                             </div>
                         </div>
@@ -33,24 +33,26 @@
                 <!-- Card de Listagem de clientes -->
                 <card-component titulo="Relação de Clientes">
                     <template v-slot:conteudo>
-                        <table-component 
-                        :dados="clientes.data"
-                        :visualizar="{
+                        <table-component :dados="clientes.data" :visualizar="{
                             visivel: true,
                             dataToggle: 'modal',
                             dataTarget: '#modalClienteVisualizar'
                         }" :editar="{
-                                visivel: true,
-                                dataToggle: 'modal',
-                                dataTarget: '#modalClienteEditar'
-                        }" :deletar="{
-                                dataToggle: 'modal',
-                                dataTarget: '#modalClienteDeletar',
-                                visivel: true
-                        }" :titulos="{
-                                id: { titulo: 'ID', tipo: 'texto' },
-                                nome: { titulo: 'Nome', tipo: 'texto' },
-                        }">
+    visivel: true,
+    dataToggle: 'modal',
+    dataTarget: '#modalClienteEditar'
+}" :finalizar="{
+    dataToggle: 'modal',
+    dataTarget: '#modalLocacoesFinalizar',
+    visivel: false
+}" :deletar="{
+    dataToggle: 'modal',
+    dataTarget: '#modalClienteDeletar',
+    visivel: true
+}" :titulos="{
+    id: { titulo: 'ID', tipo: 'texto' },
+    nome: { titulo: 'Nome', tipo: 'texto' },
+}">
                         </table-component>
                     </template>
                     <template v-slot:rodape>
@@ -72,7 +74,7 @@
                 </card-component>
                 <!-- Fim do Card de Listagem de clientes -->
 
-                 <!-- Modal de cadastro de cliente -->
+                <!-- Modal de cadastro de cliente -->
                 <modal-component id="modalCliente" titulo="Cadastro de Cliente">
                     <template v-slot:conteudo>
                         <div class="form-group">
@@ -90,8 +92,8 @@
                 </modal-component>
                 <!-- Fim do modal de cadastro de cliente -->
 
-                 <!-- Modal de vizualização de cliente -->
-                 <modal-component id="modalClienteVisualizar" titulo="Dados do Cliente">
+                <!-- Modal de vizualização de cliente -->
+                <modal-component id="modalClienteVisualizar" titulo="Dados do Cliente">
                     <template v-slot:conteudo>
                         <div class="card">
                             <div class="card-body">
@@ -118,12 +120,13 @@
                 </modal-component>
                 <!-- Fim do modal de vizualização de cliente -->
 
-                 <!-- Modal de edição de clientes -->
-                 <modal-component id="modalClienteEditar" titulo="Dados do Cliente">
+                <!-- Modal de edição de clientes -->
+                <modal-component id="modalClienteEditar" titulo="Dados do Cliente">
                     <template v-slot:conteudo>
                         <div class="form-group">
                             <input-container-component titulo="ID do Cliente" id="idCliente" id-help="idClienteHelp">
-                                <input type="number" class="form-control" id="idCliente" aria-describedby="idClienteHelp" v-model="$store.state.item.id" readonly>
+                                <input type="number" class="form-control" id="idCliente" aria-describedby="idClienteHelp"
+                                    v-model="$store.state.item.id" readonly>
                             </input-container-component>
                             <input-container-component titulo="Nome do Cliente" id="novoNome" idq-help="novoNomeHelp"
                                 texto-ajuda="(Opcional) Informe o novo Nome do Cliente">
@@ -167,97 +170,97 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                urlBase: 'http://127.0.0.1:8000/api/v1/cliente',
-                urlPaginacao: '',
-                urlFiltro: '',
-                novoCliente: '',
-                clientes: {
-                    data: []
-                },
-                busca: { id: '', nome: '' }
+export default {
+    data() {
+        return {
+            urlBase: 'http://127.0.0.1:8000/api/v1/cliente',
+            urlPaginacao: '',
+            urlFiltro: '',
+            novoCliente: '',
+            clientes: {
+                data: []
+            },
+            busca: { id: '', nome: '' }
+        }
+    },
+    methods: {
+        pesquisar() {
+            let filtro = ''
+
+            for (let chave in this.busca) {
+                if (this.busca[chave]) {
+                    if (filtro != '') {
+                        filtro += ";"
+                    }
+
+                    filtro += chave + ':like:' + this.busca[chave];
+                }
+            }
+            if (filtro != '') {
+                this.urlPaginacao = 'page=1';
+                this.urlFiltro = '&filtro=' + filtro;
+            } else {
+                this.urlFiltro = ''
+            }
+            this.carregarClientes()
+        },
+        paginacao(li) {
+            if (li.url) {
+                this.urlPaginacao = li.url.split('?')[1];
+                this.carregarClientes() // requisitando novamente os dados para nossa API com base na URL atualizada
             }
         },
-        methods: {
-            pesquisar() {
-                let filtro = ''
-
-                for (let chave in this.busca) {
-                    if (this.busca[chave]) {
-                        if (filtro != '') {
-                            filtro += ";"
-                        }
-
-                        filtro += chave + ':like:' + this.busca[chave];
-                    }
-                }
-                if (filtro != '') {
-                    this.urlPaginacao = 'page=1';
-                    this.urlFiltro = '&filtro=' + filtro;
-                } else {
-                    this.urlFiltro = ''
-                }
-                this.carregarClientes()
-            },
-            paginacao(li) {
-                if (li.url) {
-                    this.urlPaginacao = li.url.split('?')[1];
-                    this.carregarClientes() // requisitando novamente os dados para nossa API com base na URL atualizada
-                }
-            },
-            carregarClientes() {
-                let url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro;
-                axios.get(url)
-                    .then(response => {
-                        this.clientes = response.data
-                    })
-                    .catch(errors => {
-                        console.log(errors)
-                    })
-            },
-            salvar() {
-                // instanciando um formulário para definir os atributos
-                let formData = new FormData();
-                formData.append('nome', this.novoCliente);
-
-                // enviando atributos para a requisição post para que seja salvo no back-end
-                axios.post(this.urlBase, formData)
-                    .then(response => {
-                        swal("Sucesso!", `Cliente ${this.novoCliente
-                        } cadastrado com sucesso!`, "success");
-                        this.carregarClientes()
-                    })
-                    .catch(errors => {
-                        swal("Erro!", `Ocorreu o seguinte erro: ${errors.response.data.message}.`, "error");
-                    })
-            },
-            editar() {
-                let formData = new FormData();
-                formData.append('_method', 'patch');
-                formData.append('nome', this.$store.state.item.nome);
-
-                let url = this.urlBase + '/' + this.$store.state.item.id
-
-                axios.post(url, formData)
-                    .then(response => {
-                        swal("Sucesso!", `Cliente ${this.$store.state.item.nome} editado com sucesso!`, "success");
-                        this.carregarClientes()
-                    })
-                    .catch(errors => {
-                        swal("Erro!", `Ocorreu um erro na edição: ${errors.response}`, "error");
-                        console.log(errors)
-                    })
-            },
-            deletar(item) {
-                swal({
-                    title: "Você tem certeza?",
-                    text: `Ao confirmar o exclusão, todos os dados do cliente ${this.$store.state.item.nome} serão removidos permanentimente da base de dados.`,
-                    icon: "warning",
-                    buttons: ["Cancelar", "Deletar"],
-                    dangerMode: true,
+        carregarClientes() {
+            let url = this.urlBase + '?' + this.urlPaginacao + this.urlFiltro;
+            axios.get(url)
+                .then(response => {
+                    this.clientes = response.data
                 })
+                .catch(errors => {
+                    console.log(errors)
+                })
+        },
+        salvar() {
+            // instanciando um formulário para definir os atributos
+            let formData = new FormData();
+            formData.append('nome', this.novoCliente);
+
+            // enviando atributos para a requisição post para que seja salvo no back-end
+            axios.post(this.urlBase, formData)
+                .then(response => {
+                    swal("Sucesso!", `Cliente ${this.novoCliente
+                        } cadastrado com sucesso!`, "success");
+                    this.carregarClientes()
+                })
+                .catch(errors => {
+                    swal("Erro!", `Ocorreu o seguinte erro: ${errors.response.data.message}.`, "error");
+                })
+        },
+        editar() {
+            let formData = new FormData();
+            formData.append('_method', 'patch');
+            formData.append('nome', this.$store.state.item.nome);
+
+            let url = this.urlBase + '/' + this.$store.state.item.id
+
+            axios.post(url, formData)
+                .then(response => {
+                    swal("Sucesso!", `Cliente ${this.$store.state.item.nome} editado com sucesso!`, "success");
+                    this.carregarClientes()
+                })
+                .catch(errors => {
+                    swal("Erro!", `Ocorreu um erro na edição: ${errors.response}`, "error");
+                    console.log(errors)
+                })
+        },
+        deletar(item) {
+            swal({
+                title: "Você tem certeza?",
+                text: `Ao confirmar o exclusão, todos os dados do cliente ${this.$store.state.item.nome} serão removidos permanentimente da base de dados.`,
+                icon: "warning",
+                buttons: ["Cancelar", "Deletar"],
+                dangerMode: true,
+            })
                 .then((willDelete) => {
                     if (willDelete) {
                         // criando url para delete
@@ -271,7 +274,7 @@
                                 swal(`Cliente ${item.cliente} foi removido com sucesso!`, {
                                     icon: "success",
                                 });
-                                this. carregarClientes()
+                                this.carregarClientes()
                             })
                             .catch(errors => {
                                 swal(`Erro, verifique se o cliente ${item.cliente} possui alguma locação em aberto.`, {
@@ -281,10 +284,10 @@
                             })
                     }
                 });
-            }
-        },
-        mounted() {
-            this.carregarClientes()
         }
+    },
+    mounted() {
+        this.carregarClientes()
     }
+}
 </script>

@@ -17,17 +17,20 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('cliente_id');
             $table->unsignedBigInteger('carro_id');
+            $table->unsignedBigInteger('status_id')->nullable();
             $table->dateTime('data_inicio_periodo');
             $table->dateTime('data_final_previsto_periodo');
-            $table->dateTime('data_final_realizado_periodo');
-            $table->float('valor_diaria', 8,2);
+            $table->dateTime('data_final_realizado_periodo')->nullable();
+            $table->float('valor_diaria', 8, 2);
             $table->integer('km_inicial');
-            $table->integer('km_final');
+            $table->integer('km_final')->nullable();
+            $table->integer('km_percorrido')->nullable();
             $table->timestamps();
-    
+
             //foreign key (constraints)
             $table->foreign('cliente_id')->references('id')->on('clientes');
             $table->foreign('carro_id')->references('id')->on('carros');
+            $table->foreign('status_id')->references('id')->on('statusLocacao');
         });
     }
 
