@@ -87,16 +87,6 @@
             >
               <i class="bi bi-check-square-fill"></i>
             </button>
-            <button
-              v-if="dados[chave].status_id === 1"
-              class="btn btn btn-success btn-sm m-1"
-              title="Finalizar"
-              @click="setStore(obj, dados)"
-              :data-bs-toggle="finalizar.dataToggle"
-              :data-bs-target="finalizar.dataTarget"
-            >
-              <i class="bi bi-check-square-fill"></i>
-            </button>
           </td>
         </tr>
       </tbody>
