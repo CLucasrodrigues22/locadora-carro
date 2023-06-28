@@ -77,6 +77,13 @@ app.config.globalProperties.$filters = {
         
         let valor =  d.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
         return valor
+    },
+    formataDataptbr(d) {
+        if (!d) return "";
+
+        let d1 = new Date(d);
+        let dataPTBR = d1.toLocaleDateString("pt-BR");
+        return dataPTBR
     }
 },
 /**

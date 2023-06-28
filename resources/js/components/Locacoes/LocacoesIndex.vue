@@ -195,7 +195,11 @@
               >
                 <div class="ms-2 me-auto">
                   <div class="fw-bold">Início do Aluguel</div>
-                  {{ $store.state.item.data_inicio_periodo }}
+                  {{
+                    $filters.formataDataptbr(
+                      $store.state.item.data_inicio_periodo
+                    )
+                  }}
                 </div>
               </li>
               <li
@@ -203,7 +207,11 @@
               >
                 <div class="ms-2 me-auto">
                   <div class="fw-bold">Data para devolução (previsão)</div>
-                  {{ $store.state.item.data_final_previsto_periodo }}
+                  {{
+                    $filters.formataDataptbr(
+                      $store.state.item.data_final_previsto_periodo
+                    )
+                  }}
                 </div>
               </li>
               <li
@@ -331,7 +339,6 @@
 </template>
 
 <script>
-import { Alert } from "bootstrap";
 import { jsPDF } from "jspdf";
 export default {
   props: {
@@ -483,45 +490,48 @@ export default {
       let t2 = this.dataFinal;
       let d1 = new Date(t1);
       let d2 = new Date(t2);
-      let data1 = d1.toLocaleDateString();
-      let data2 = d2.toLocaleDateString();
+      let data1 = d1.toLocaleDateString("en-CA");
+      let data2 = d2.toLocaleDateString("en-CA");
 
       const diffInMs = new Date(data2) - new Date(data1);
-      //const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
-      console.log(diffInMs);
+      const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
 
-      // swal({
-      //     title: "Você realmente deseja finalizar essa locação?",
-      //     icon: "warning",
-      //     buttons: true,
-      //     dangerMode: true,
-      //     buttons: ["Fechar", "Finalizar Locação"],
-      // })
-      //     .then((willDelete) => {
-      //         if (willDelete) {
-      //             let formData = new FormData();
-      //             formData.append('_method', 'patch')
-      //             formData.append('km_final', this.kmVeiculoFinal);
-      //             formData.append('km_percorrido', kmPercorrido);
-      //             formData.append('total_dias_locacao', totalDiasLocacao);
-      //             formData.append('valorLocacao', valorLocacao);
-      //             formData.append('status_id', this.statusLocacao);
-      //             formData.append('data_final_realizado_periodo', this.dataFinal);
-      //             let url = this.urlBase + '/' + this.$store.state.item.id
+      swal({
+        title: "Você realmente deseja finalizar essa locação?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+        buttons: ["Fechar", "Finalizar Locação"],
+      }).then((willDelete) => {
+        if (willDelete) {
+          let formData = new FormData();
+          formData.append("_method", "patch");
+          formData.append("km_final", this.kmVeiculoFinal);
+          formData.append("km_percorrido", kmPercorrido);
+          formData.append("total_dias_locacao", diffInDays);
+          formData.append("valorLocacao", valorLocacao);
+          formData.append("status_id", this.statusLocacao);
+          formData.append("data_final_realizado_periodo", this.dataFinal);
+          let url = this.urlBase + "/" + this.$store.state.item.id;
 
-      //             axios.post(url, formData)
-      //                 .then(response => {
-      //                     swal("Locação finalizada com sucesso!", {
-      //                         icon: "success",
-      //                     });
-      //                     this.carregarLocacoes()
-      //                 })
-      //                 .catch(errors => {
-      //                     swal("Erro!", `Ocorreu um erro na finalização da locação: erro ${errors.response.data.message}`, "error");
-      //                     console.log(errors.response)
-      //                 })
-      //         }
-      //     });
+          axios
+            .post(url, formData)
+            .then((response) => {
+              swal("Locação finalizada com sucesso!", {
+                icon: "success",
+              });
+              this.carregarLocacoes();
+            })
+            .catch((errors) => {
+              swal(
+                "Erro!",
+                `Ocorreu um erro na finalização da locação: erro ${errors.response.data.message}`,
+                "error"
+              );
+              console.log(errors.response);
+            });
+        }
+      });
     },
     gerarPdf() {
       const doc = new jsPDF();

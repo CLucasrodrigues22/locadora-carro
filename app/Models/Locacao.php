@@ -16,6 +16,7 @@ class Locacao extends Model
         'data_inicio_periodo',
         'data_final_previsto_periodo',
         'data_final_realizado_periodo',
+        'total_dias_locacao',
         'valor_diaria',
         'km_inicial',
         'km_final',
