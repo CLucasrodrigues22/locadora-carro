@@ -90,6 +90,7 @@
                 id="nomeCliente"
                 id-help="nomeClienteHelp"
                 texto-ajuda="(Obrigatório) Informe a marca que o modelo pertence"
+                @click="setarKm()"
               >
                 <select class="form-select" v-model="nomeCliente">
                   <option
@@ -146,21 +147,13 @@
                   required
                 />
               </input-container-component>
-              <input-container-component
-                titulo="KM inicial do Veículo"
+              <input
+                type="hidden"
+                class="form-control"
                 id="kmVeiculoIncio"
-                id-help="kmVeiculoIncioHelp"
-                texto-ajuda="(Obrigatório) Informe o km do veículo antes do aluguel"
-              >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="kmVeiculoIncio"
-                  aria-describedby="kmVeiculoIncioHelp"
-                  v-model="kmVeiculoIncio"
-                  required
-                />
-              </input-container-component>
+                aria-describedby="kmVeiculoIncioHelp"
+                v-model="placaCarro"
+              />
             </div>
           </template>
           <template v-slot:rodape>
@@ -405,30 +398,40 @@ export default {
         });
     },
     carregarDadosCarros() {
-      let urlCarros = "http://127.0.0.1:8000/api/v1/carro?all";
+      let urlCarros =
+        "http://127.0.0.1:8000/api/v1/carro?all&filtro=disponivel:like:1";
       axios
         .get(urlCarros)
         .then((response) => {
           let carroDados = response.data;
           carroDados.forEach((valorAtual) => {
-            var dadosCarro = [valorAtual.id, valorAtual.placa];
+            var dadosCarro = [valorAtual.id, valorAtual.placa, valorAtual.km];
             this.carros.data.push(dadosCarro);
           });
-          //console.log(this.carros)
         })
         .catch((errors) => {
           console.log(errors);
         });
     },
     salvar() {
+      // resgatando km do carro pelo id
+      var idCarro = this.placaCarro;
+      var carros = this.carros.data;
+      var carroKm = "";
+      carros.forEach((valorCarro) => {
+        if (valorCarro[0] === idCarro) {
+          var carroData = valorCarro[2];
+          carroKm = carroData;
+        }
+      });
+
       let formData = new FormData();
       formData.append("cliente_id", this.nomeCliente);
       formData.append("carro_id", this.placaCarro);
       formData.append("data_inicio_periodo", this.inicioAluguel);
       formData.append("data_final_previsto_periodo", this.dataFinalPrevista);
       formData.append("valor_diaria", this.valorDiaria);
-      formData.append("km_inicial", this.kmVeiculoIncio);
-
+      formData.append("km_inicial", carroKm);
       // enviando atributos para a requisição post para que seja salvo no back-end
       axios
         .post(this.urlBase, formData)
@@ -446,6 +449,7 @@ export default {
         });
     },
     cancelarLocacao() {
+      this.statusLocacao = 2; // status de locação finalizada
       swal({
         title: "Você realmente deseja cancelar essa locação?",
         icon: "warning",
@@ -456,7 +460,7 @@ export default {
         if (willDelete) {
           let formData = new FormData();
           formData.append("_method", "patch");
-          formData.append("status_id", 2); // status de locação cancelada
+          formData.append("status_id", this.statusLocacao); // status de locação cancelada
 
           let url = this.urlBase + "/" + this.$store.state.item.id;
 
@@ -496,6 +500,9 @@ export default {
       const diffInMs = new Date(data2) - new Date(data1);
       const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
 
+      // calcular valor total da locacao
+      var valorLocacao = diffInDays * this.$store.state.item.valor_diaria;
+
       swal({
         title: "Você realmente deseja finalizar essa locação?",
         icon: "warning",
@@ -520,6 +527,7 @@ export default {
               swal("Locação finalizada com sucesso!", {
                 icon: "success",
               });
+              console.log(response);
               this.carregarLocacoes();
             })
             .catch((errors) => {

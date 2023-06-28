@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreLocacaoRequest;
 use App\Http\Requests\UpdateLocacaoRequest;
 use App\Models\Locacao;
+use App\Models\Carro;
 use Illuminate\Http\Request;
 use App\Repositories\LocacaoRepository;
 use Ramsey\Uuid\Type\Integer;
@@ -14,9 +15,10 @@ class LocacaoController extends Controller
 
     protected $locacao;
 
-    public function __construct(Locacao $locacao)
+    public function __construct(Locacao $locacao, Carro $carro)
     {
         $this->locacao = $locacao;
+        $this->carro = $carro;
     }
 
     /**
@@ -66,6 +68,11 @@ class LocacaoController extends Controller
             'km_inicial' => $request->km_inicial
         ]);
 
+        // atualizando status de disponibilidade de carro
+        $idCarro = $request->carro_id;
+        $carro = $this->carro->find($idCarro);
+        $carro->update(['disponivel' => 0]);
+
         return response()->json($locacao, 201);
     }
 
@@ -94,33 +101,37 @@ class LocacaoController extends Controller
      */
     public function update(UpdateLocacaoRequest $request, $id)
     {
-        $locacao = $this->locacao->find($id);
+        try {
+            $locacao = $this->locacao->find($id);
 
-        if ($locacao === null) {
-            return response()->json(['erro' => 'Impossível realizar a atualização. A locação solicitado não existe'], 404);
-        }
-
-        if ($request->method() === 'PATCH') {
-
-            $regrasDinamicas = array();
-
-            //percorrendo todas as regras definidas no Model
-            foreach ($locacao->rules() as $input => $regra) {
-
-                //coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
-                if (array_key_exists($input, $request->all())) {
-                    $regrasDinamicas[$input] = $regra;
-                }
+            if ($locacao === null) {
+                return response()->json(['erro' => 'Impossível realizar a atualização. A locação solicitado não existe'], 404);
             }
 
-            $request->validate($regrasDinamicas);
-        } else {
-            $request->validate($locacao->rules());
-        }
+            if ($request->method() === 'PATCH') {
 
-        $locacao->fill($request->all());
-        $locacao->save();
-        return response()->json($locacao, 200);
+                $regrasDinamicas = array();
+
+                //percorrendo todas as regras definidas no Model
+                foreach ($locacao->rules() as $input => $regra) {
+
+                    //coletar apenas as regras aplicáveis aos parâmetros parciais da requisição PATCH
+                    if (array_key_exists($input, $request->all())) {
+                        $regrasDinamicas[$input] = $regra;
+                    }
+                }
+
+                $request->validate($regrasDinamicas);
+            } else {
+                $request->validate($locacao->rules());
+            }
+
+            $locacao->fill($request->all());
+            $locacao->save();
+            return response()->json($request->status_id, 200);
+        } catch (\PDOException $e) {
+            return response()->json($e);
+        }
     }
 
     /**
