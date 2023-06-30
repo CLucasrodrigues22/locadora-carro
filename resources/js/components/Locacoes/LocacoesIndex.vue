@@ -42,7 +42,7 @@
                 <pagination-component>
                   <li
                     :class="li.active ? 'page-item active' : 'page-item'"
-                    v-for="(li, key) in carros.links"
+                    v-for="(li, key) in locacoes.links"
                     :key="key"
                     @click="paginacao(li)"
                   >
@@ -482,6 +482,21 @@ export default {
             });
         }
       });
+      // enviando dados para o end point de carro
+      let formData = new FormData();
+      formData.append("_method", "patch");
+      formData.append("disponivel", 1);
+
+      let url =
+        "http://127.0.0.1:8000/api/v1/carro/" + this.$store.state.item.carro_id;
+      axios
+        .post(url, formData)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((errors) => {
+          console.log(errors);
+        });
     },
     finalizarLocacao() {
       this.statusLocacao = 3; // status de locação finalizada
@@ -540,6 +555,23 @@ export default {
             });
         }
       });
+
+      // enviando dados para o end point de carro
+      let formData = new FormData();
+      formData.append("_method", "patch");
+      formData.append("disponivel", 1);
+      formData.append("km", this.kmVeiculoFinal);
+
+      let url =
+        "http://127.0.0.1:8000/api/v1/carro/" + this.$store.state.item.carro_id;
+      axios
+        .post(url, formData)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((errors) => {
+          console.log(errors);
+        });
     },
     gerarPdf() {
       const doc = new jsPDF();
