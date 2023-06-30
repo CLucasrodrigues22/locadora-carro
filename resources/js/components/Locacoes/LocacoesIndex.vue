@@ -223,6 +223,15 @@
                   {{ $store.state.item.km_inicial }}
                 </div>
               </li>
+              <li
+                class="list-group-item d-flex justify-content-between align-items-start"
+                v-if="$store.state.item.status_id === 3"
+              >
+                <div class="ms-2 me-auto">
+                  <div class="fw-bold">KM ao finalizar a locação</div>
+                  {{ $store.state.item.km_final }}
+                </div>
+              </li>
             </ol>
           </template>
           <template v-slot:rodape>
@@ -505,12 +514,12 @@ export default {
         this.kmVeiculoFinal - this.$store.state.item.km_inicial;
 
       // tempo de aluguel
-      let t1 = this.$store.state.item.data_inicio_periodo;
-      let t2 = this.dataFinal;
-      let d1 = new Date(t1);
-      let d2 = new Date(t2);
-      let data1 = d1.toLocaleDateString("en-CA");
-      let data2 = d2.toLocaleDateString("en-CA");
+      var t1 = this.$store.state.item.data_inicio_periodo;
+      var t2 = this.dataFinal;
+      var d1 = new Date(t1);
+      var d2 = new Date(t2);
+      var data1 = d1.toLocaleDateString("en-CA");
+      var data2 = d2.toLocaleDateString("en-CA");
 
       const diffInMs = new Date(data2) - new Date(data1);
       const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
@@ -518,71 +527,93 @@ export default {
       // calcular valor total da locacao
       var valorLocacao = diffInDays * this.$store.state.item.valor_diaria;
 
-      swal({
-        title: "Você realmente deseja finalizar essa locação?",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-        buttons: ["Fechar", "Finalizar Locação"],
-      }).then((willDelete) => {
-        if (willDelete) {
-          let formData = new FormData();
-          formData.append("_method", "patch");
-          formData.append("km_final", this.kmVeiculoFinal);
-          formData.append("km_percorrido", kmPercorrido);
-          formData.append("total_dias_locacao", diffInDays);
-          formData.append("valorLocacao", valorLocacao);
-          formData.append("status_id", this.statusLocacao);
-          formData.append("data_final_realizado_periodo", this.dataFinal);
-          let url = this.urlBase + "/" + this.$store.state.item.id;
+      // validadando se km final é menor que o inicial e se a data final é menor que a inicial
+      if (this.kmVeiculoFinal < this.$store.state.item.km_inicial) {
+        swal(
+          "Erro!",
+          "A quilometragem final não pode ser menor que a quilometragem antes do início da locação do carro.",
+          "error"
+        );
+        return false;
+      } else if (d2 < d1) {
+        swal(
+          "Erro!",
+          "A data final da locação não pode ser menor que a data de inicio da locação do carro.",
+          "error"
+        );
+        return false;
+      } else {
+        swal({
+          title: "Você realmente deseja finalizar essa locação?",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+          buttons: ["Fechar", "Finalizar Locação"],
+        }).then((willDelete) => {
+          if (willDelete) {
+            let formData = new FormData();
+            formData.append("_method", "patch");
+            formData.append("km_final", this.kmVeiculoFinal);
+            formData.append("km_percorrido", kmPercorrido);
+            formData.append("total_dias_locacao", diffInDays);
+            formData.append("valorLocacao", valorLocacao);
+            formData.append("status_id", this.statusLocacao);
+            formData.append("data_final_realizado_periodo", this.dataFinal);
+            let url = this.urlBase + "/" + this.$store.state.item.id;
 
-          axios
-            .post(url, formData)
-            .then((response) => {
-              swal("Locação finalizada com sucesso!", {
-                icon: "success",
+            axios
+              .post(url, formData)
+              .then((response) => {
+                swal("Locação finalizada com sucesso!", {
+                  icon: "success",
+                });
+                console.log(response);
+                this.carregarLocacoes();
+              })
+              .catch((errors) => {
+                swal(
+                  "Erro!",
+                  `Ocorreu um erro na finalização da locação: erro ${errors.response.data.message}`,
+                  "error"
+                );
+                console.log(errors.response);
               });
-              console.log(response);
-              this.carregarLocacoes();
-            })
-            .catch((errors) => {
-              swal(
-                "Erro!",
-                `Ocorreu um erro na finalização da locação: erro ${errors.response.data.message}`,
-                "error"
-              );
-              console.log(errors.response);
-            });
-        }
-      });
-
-      // enviando dados para o end point de carro
-      let formData = new FormData();
-      formData.append("_method", "patch");
-      formData.append("disponivel", 1);
-      formData.append("km", this.kmVeiculoFinal);
-
-      let url =
-        "http://127.0.0.1:8000/api/v1/carro/" + this.$store.state.item.carro_id;
-      axios
-        .post(url, formData)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((errors) => {
-          console.log(errors);
+          }
         });
+
+        // enviando dados para o end point de carro
+        let formData = new FormData();
+        formData.append("_method", "patch");
+        formData.append("disponivel", 1);
+        formData.append("km", this.kmVeiculoFinal);
+
+        let url =
+          "http://127.0.0.1:8000/api/v1/carro/" +
+          this.$store.state.item.carro_id;
+        axios
+          .post(url, formData)
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((errors) => {
+            console.log(errors);
+          });
+        return false;
+      }
     },
     gerarPdf() {
       const doc = new jsPDF();
-
+      let d1 = new Date(this.$store.state.item.data_inicio_periodo);
+      let d2 = new Date(this.$store.state.item.data_final_realizado_periodo);
+      var dataInicio = d1.toLocaleDateString("pt-BR");
+      var dataFinal = d2.toLocaleDateString("pt-BR");
       if (this.$store.state.item.status_id === 2) {
         doc.text(
           `
             Locação n°: ${this.$store.state.item.id}
             Cliente: ${this.$store.state.item.cliente.nome}
             Placa do carro: ${this.$store.state.item.carro.placa}
-            Inicio do Aluguel: ${this.$store.state.item.data_inicio_periodo}
+            Inicio do Aluguel: ${dataInicio}
             Status do aluguel: Cancelado 
             KM percorrido: ${this.$store.state.item.km_percorrido}
             Valor tatol: ${this.$store.state.item.valor_diaria}
@@ -596,8 +627,8 @@ export default {
             Locação n°: ${this.$store.state.item.id}
             Cliente: ${this.$store.state.item.cliente.nome}
             Placa do carro: ${this.$store.state.item.carro.placa}
-            Inicio do Aluguel: ${this.$store.state.item.data_inicio_periodo}
-            Término do Aluguel: ${this.$store.state.item.data_final_realizado_periodo}
+            Inicio do Aluguel: ${dataInicio}
+            Término do Aluguel: ${dataFinal}
             Status do aluguel: Finalizado 
             KM percorrido: ${this.$store.state.item.km_percorrido}
             Valor tatol: ${this.$store.state.item.valor_diaria}

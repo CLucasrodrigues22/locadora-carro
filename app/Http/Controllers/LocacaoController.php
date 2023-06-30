@@ -126,8 +126,6 @@ class LocacaoController extends Controller
                 $request->validate($locacao->rules());
             }
 
-            $carro = Carro::where('id', $request->carro_id)->update(['disponivel' => 1]);
-
             $locacao->fill($request->all());
             $locacao->save();
             return response()->json($locacao, 200);

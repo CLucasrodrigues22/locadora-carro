@@ -35,8 +35,11 @@
             <span v-if="titulos[chaveValor].tipo == 'imagem'">
               <img :src="'/storage/' + valor" width="50" height="50" />
             </span>
-            <span v-else-if="titulos[chaveValor].tipo == 'status'">{{
+            <span v-if="titulos[chaveValor].tipo == 'status'">{{
               valor.status
+            }}</span>
+            <span v-if="titulos[chaveValor].tipo == 'boolean'">{{
+              valor === 1 ? "Disponível" : "Indisponível"
             }}</span>
           </td>
           <td
