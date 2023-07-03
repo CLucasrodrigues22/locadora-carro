@@ -607,6 +607,11 @@ export default {
       let d2 = new Date(this.$store.state.item.data_final_realizado_periodo);
       var dataInicio = d1.toLocaleDateString("pt-BR");
       var dataFinal = d2.toLocaleDateString("pt-BR");
+      let valorTotal = this.$store.state.item.valor_diaria;
+      let valor = valorTotal.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      });
       if (this.$store.state.item.status_id === 2) {
         doc.text(
           `
@@ -615,8 +620,8 @@ export default {
             Placa do carro: ${this.$store.state.item.carro.placa}
             Inicio do Aluguel: ${dataInicio}
             Status do aluguel: Cancelado 
-            KM percorrido: ${this.$store.state.item.km_percorrido}
-            Valor tatol: ${this.$store.state.item.valor_diaria}
+            KM percorrido: ${this.$store.state.item.km_percorrido} KM
+            Valor tatol: ${valor}
          `,
           10,
           10
@@ -630,8 +635,8 @@ export default {
             Inicio do Aluguel: ${dataInicio}
             Término do Aluguel: ${dataFinal}
             Status do aluguel: Finalizado 
-            KM percorrido: ${this.$store.state.item.km_percorrido}
-            Valor tatol: ${this.$store.state.item.valor_diaria}
+            KM percorrido: ${this.$store.state.item.km_percorrido} KM
+            Valor total: ${valor}
          `,
           10,
           10
