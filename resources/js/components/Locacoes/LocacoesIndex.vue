@@ -2,6 +2,92 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-8">
+        <!-- Card Pesquisar por locações -->
+        <card-component titulo="Busca de Marcas">
+          <template v-slot:conteudo>
+            <div class="row">
+              <div class="col mb-3">
+                <input-container-component
+                  titulo="ID"
+                  id="inputId"
+                  id-help="idHelp"
+                  texto-ajuda="(Opcional) Informe o ID da Locação"
+                >
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="inputId"
+                    aria-describedby="idHelp"
+                    placeholder="ID"
+                    v-model="busca.id"
+                  />
+                </input-container-component>
+              </div>
+              <div class="col mb-3">
+                <input-container-component
+                  titulo="Nome do Cliente"
+                  id="inputNome"
+                  id-help="nomeHelp"
+                  texto-ajuda="(Opcional) Informe o nome do Cliente"
+                >
+                  <select class="form-select" v-model="busca.cliente_id">
+                    <option
+                      v-for="(item, key) in clientes.data"
+                      :key="key"
+                      :value="item[0]"
+                    >
+                      {{ item[1] }}
+                    </option>
+                  </select>
+                </input-container-component>
+              </div>
+              <div class="col mb-3">
+                <input-container-component
+                  titulo="Placa do Carro"
+                  id="inputNome"
+                  id-help="nomeHelp"
+                  texto-ajuda="(Opcional) Selecione a placa do Carro"
+                >
+                  <select class="form-select" v-model="busca.carro_id">
+                    <option
+                      v-for="(item, key) in carros.data"
+                      :key="key"
+                      :value="item[0]"
+                    >
+                      {{ item[1] }}
+                    </option>
+                  </select>
+                </input-container-component>
+              </div>
+              <div class="col mb-3">
+                <input-container-component
+                  titulo="Status da Locação"
+                  id="inputNome"
+                  id-help="nomeHelp"
+                  texto-ajuda="(Opcional) Selecione o status da Locação"
+                >
+                  <select class="form-select" v-model="busca.status_id">
+                    <option value="1">Ativo</option>
+                    <option value="2">Cancelado</option>
+                    <option value="3">Finalizado</option>
+                  </select>
+                </input-container-component>
+              </div>
+            </div>
+          </template>
+
+          <template v-slot:rodape>
+            <button
+              type="submit"
+              class="btn btn-primary btn-sm float-left"
+              @click="pesquisar()"
+            >
+              Pesquisar
+            </button>
+          </template>
+        </card-component>
+        <!-- Fim de card de pesquisa -->
+
         <!-- Card de Listagem de locações -->
         <card-component titulo="Relação de Locações">
           <template v-slot:conteudo>
@@ -353,6 +439,7 @@ export default {
     return {
       urlBase: "http://127.0.0.1:8000/api/v1/locacao",
       urlPaginacao: "",
+      urlFiltro: "",
       placaCarro: "",
       nomeCliente: "",
       inicioAluguel: "",
@@ -371,9 +458,31 @@ export default {
       carros: {
         data: [],
       },
+      busca: { id: "", cliente_id: "", carro_id: "", status_id: "" },
     };
   },
   methods: {
+    pesquisar() {
+      let filtro = "";
+
+      for (let chave in this.busca) {
+        if (this.busca[chave]) {
+          if (filtro != "") {
+            filtro += ";";
+          }
+
+          filtro += chave + ":like:" + this.busca[chave];
+        }
+      }
+      if (filtro != "") {
+        this.urlPaginacao = "page=1";
+        this.urlFiltro = "&filtro=" + filtro;
+      } else {
+        this.urlFiltro = "";
+      }
+      console.log(this.urlFiltro);
+      this.carregarLocacoes();
+    },
     paginacao(li) {
       if (li.url) {
         this.urlPaginacao = li.url.split("?")[1];
@@ -381,7 +490,7 @@ export default {
       }
     },
     carregarLocacoes() {
-      let url = this.urlBase + "?" + this.urlPaginacao;
+      let url = this.urlBase + "?" + this.urlPaginacao + this.urlFiltro;
       axios
         .get(url)
         .then((response) => {

@@ -358,6 +358,7 @@ export default {
       } else {
         this.urlFiltro = "";
       }
+      console.log(this.urlFiltro);
       this.carregarMarcas();
     },
     paginacao(li) {
