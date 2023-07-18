@@ -8,47 +8,125 @@
             <div class="row">
               <div class="col mb-3">
                 <input-container-component
-                  titulo="ID"
-                  id="inputId"
-                  id-help="idHelp"
-                  texto-ajuda="(Opcional) Informe o ID do modelo"
+                  titulo="Nome do modelo"
+                  id="inputNome"
+                  id-help="nomeHelp"
+                  texto-ajuda="(Opcional) selecione o nome do Modelo"
+                >
+                  <select class="form-select" v-model="busca.nome">
+                    <option
+                      v-for="(item, key) in modelos.data"
+                      :key="key"
+                      :value="item[0]"
+                    >
+                      {{ item["nome"] }}
+                    </option>
+                  </select>
+                </input-container-component>
+              </div>
+
+              <div class="col mb-3">
+                <input-container-component
+                  titulo="Quantidade de portas"
+                  id="inputPortas"
+                  id-help="nomeHelp"
+                  texto-ajuda="(Opcional) Informe a quantidade de portas"
                 >
                   <input
-                    type="number"
+                    type="text"
                     class="form-control"
-                    id="inputId"
-                    aria-describedby="idHelp"
-                    placeholder="ID"
-                    v-model="busca.id"
+                    id="inputPortas"
+                    aria-describedby="portasHelp"
+                    placeholder="Ex: 4"
+                    v-model="busca.numero_portas"
+                  />
+                </input-container-component>
+              </div>
+
+              <!-- <div class="col mb-3">
+                <input-container-component
+                  titulo="Número de portas"
+                  id="inputPortas"
+                  id-help="portasHelp"
+                  texto-ajuda="(Opcional) Informe o número de portas"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="inputPortas"
+                    aria-describedby="portasHelp"
+                    placeholder="Ex: 4"
+                    v-model="busca.numero_portas"
                   />
                 </input-container-component>
               </div>
               <div class="col mb-3">
                 <input-container-component
-                  titulo="Nome do Modelo"
-                  id="inputNome"
-                  id-help="nomeHelp"
-                  texto-ajuda="(Opcional) Informe o nome do Modelo"
+                  titulo="Número de Lugares"
+                  id="inputLugares"
+                  id-help="lugaresHelp"
+                  texto-ajuda="(Opcional) Informe o número de Lugares"
                 >
                   <input
                     type="text"
                     class="form-control"
-                    id="inputNome"
-                    aria-describedby="nomeHelp"
-                    placeholder="Ex: Gol"
-                    v-model="busca.nome"
+                    id="inputLugares"
+                    aria-describedby="lugaresHelp"
+                    placeholder="Ex: 5"
+                    v-model="busca.lugares"
                   />
                 </input-container-component>
               </div>
+              <div class="col mb-3">
+                <input-container-component
+                  titulo="Possui Air Bag"
+                  id="inputAirBag"
+                  id-help="airbagHelp"
+                  texto-ajuda="(Opcional) Informe o número de air bag"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="inputAirBag"
+                    aria-describedby="airbagHelp"
+                    placeholder="Ex: "
+                    v-model="busca.air_bag"
+                  />
+                </input-container-component>
+              </div>
+              <div class="col mb-3">
+                <input-container-component
+                  titulo="Número de portas"
+                  id="inputPortas"
+                  id-help="portasHelp"
+                  texto-ajuda="(Opcional) Informe o número de portas"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="inputPortas"
+                    aria-describedby="portasHelp"
+                    placeholder="Ex: 4"
+                    v-model="busca.abs"
+                  />
+                </input-container-component>
+              </div> -->
             </div>
           </template>
           <template v-slot:rodape>
             <button
               type="submit"
-              class="btn btn-primary btn-sm float-left"
+              class="btn btn-primary btn-sm float-left m-1"
               @click="pesquisar()"
             >
               Pesquisar
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success btn-sm float-left"
+              @click="limparFiltro()"
+            >
+              Limpar Filtro
             </button>
           </template>
         </card-component>
@@ -554,6 +632,16 @@ export default {
     };
   },
   methods: {
+    limparFiltro() {
+      this.busca.id = "";
+      this.busca.nome = "";
+      this.busca.numero_portas = "";
+      this.busca.lugares = "";
+      this.busca.air_bag = "";
+      this.busca.abs = "";
+      this.urlFiltro = "";
+      this.carregarModelos();
+    },
     pesquisar() {
       let filtro = "";
 

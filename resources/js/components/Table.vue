@@ -38,9 +38,14 @@
             <span v-if="titulos[chaveValor].tipo == 'status'">{{
               valor.status
             }}</span>
-            <span v-if="titulos[chaveValor].tipo == 'boolean'" v-bind:class="{ 'disponivel': valor === 1, 'indisponivel': valor !== 1 }">{{
-              valor === 1 ? "Disponivel" : "Indisponível"
-            }}</span>
+            <span
+              v-if="titulos[chaveValor].tipo == 'boolean'"
+              v-bind:class="{
+                disponivel: valor === 1,
+                indisponivel: valor !== 1,
+              }"
+              >{{ valor === 1 ? "Disponivel" : "Indisponível" }}</span
+            >
           </td>
           <td
             v-if="

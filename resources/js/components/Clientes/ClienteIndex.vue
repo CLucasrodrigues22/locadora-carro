@@ -46,10 +46,17 @@
           <template v-slot:rodape>
             <button
               type="submit"
-              class="btn btn-primary btn-sm float-left"
+              class="btn btn-primary btn-sm float-left m-1"
               @click="pesquisar()"
             >
               Pesquisar
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success btn-sm float-left"
+              @click="limparFiltro()"
+            >
+              Limpar Filtro
             </button>
           </template>
         </card-component>
@@ -310,6 +317,10 @@ export default {
     };
   },
   methods: {
+    limparFiltro() {
+      this.urlFiltro = "";
+      this.carregarClientes();
+    },
     pesquisar() {
       let filtro = "";
 

@@ -50,7 +50,7 @@
                 >
                   <select class="form-select" v-model="busca.carro_id">
                     <option
-                      v-for="(item, key) in carros.data"
+                      v-for="(item, key) in placas.data"
                       :key="key"
                       :value="item[0]"
                     >
@@ -79,10 +79,17 @@
           <template v-slot:rodape>
             <button
               type="submit"
-              class="btn btn-primary btn-sm float-left"
+              class="btn btn-primary btn-sm float-left m-1"
               @click="pesquisar()"
             >
               Pesquisar
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success btn-sm float-left"
+              @click="limparFiltro()"
+            >
+              Limpar Filtro
             </button>
           </template>
         </card-component>
@@ -438,6 +445,8 @@ export default {
   data() {
     return {
       urlBase: "http://127.0.0.1:8000/api/v1/locacao",
+      urlCarros: "http://127.0.0.1:8000/api/v1/carro",
+      urlClientes: "http://127.0.0.1:8000/api/v1/cliente",
       urlPaginacao: "",
       urlFiltro: "",
       placaCarro: "",
@@ -458,10 +467,21 @@ export default {
       carros: {
         data: [],
       },
+      placas: {
+        data: [],
+      },
       busca: { id: "", cliente_id: "", carro_id: "", status_id: "" },
     };
   },
   methods: {
+    limparFiltro() {
+      this.busca.id = "";
+      this.busca.cliente_id = "";
+      this.busca.carro_id = "";
+      this.busca.status_id = "";
+      this.urlFiltro = "";
+      this.carregarLocacoes();
+    },
     pesquisar() {
       let filtro = "";
 
@@ -480,7 +500,7 @@ export default {
       } else {
         this.urlFiltro = "";
       }
-      console.log(this.urlFiltro);
+
       this.carregarLocacoes();
     },
     paginacao(li) {
@@ -501,9 +521,9 @@ export default {
         });
     },
     carregarDadosClientes() {
-      let urlClientes = "http://127.0.0.1:8000/api/v1/cliente?all";
+      let urlClientesData = this.urlClientes + "?all";
       axios
-        .get(urlClientes)
+        .get(urlClientesData)
         .then((response) => {
           let clientesDados = response.data;
           clientesDados.forEach((valorAtual) => {
@@ -515,11 +535,25 @@ export default {
           console.log(errors);
         });
     },
-    carregarDadosCarros() {
-      let urlCarros =
-        "http://127.0.0.1:8000/api/v1/carro?all&filtro=disponivel:like:1";
+    carregarPlacasCarros() {
+      let urlCarrosPlaca = this.urlCarros + "?all";
       axios
-        .get(urlCarros)
+        .get(urlCarrosPlaca)
+        .then((response) => {
+          let carroDados = response.data;
+          carroDados.forEach((valorAtual) => {
+            var dadosCarro = [valorAtual.id, valorAtual.placa];
+            this.placas.data.push(dadosCarro);
+          });
+        })
+        .catch((errors) => {
+          console.log(errors);
+        });
+    },
+    carregarDadosCarros() {
+      let urlCarrosData = this.urlCarros + "?all&filtro=disponivel:like:1";
+      axios
+        .get(urlCarrosData)
         .then((response) => {
           let carroDados = response.data;
           carroDados.forEach((valorAtual) => {
@@ -758,6 +792,7 @@ export default {
     this.carregarLocacoes();
     this.carregarDadosClientes();
     this.carregarDadosCarros();
+    this.carregarPlacasCarros();
   },
 };
 </script>
