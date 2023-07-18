@@ -23,3 +23,10 @@ button.adicionar {
     padding-right: 43%;
 }
 
+.disponivel {
+    color: green;
+}
+
+.indisponivel {
+    color: red;
+}
