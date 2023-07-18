@@ -15,10 +15,9 @@ class LocacaoController extends Controller
 
     protected $locacao;
 
-    public function __construct(Locacao $locacao, Carro $carro)
+    public function __construct(Locacao $locacao)
     {
         $this->locacao = $locacao;
-        $this->carro = $carro;
     }
 
     /**
@@ -70,7 +69,7 @@ class LocacaoController extends Controller
 
         // atualizando status de disponibilidade de carro
         $idCarro = $request->carro_id;
-        $carro = $this->carro->find($idCarro);
+        $carro = Carro::find($idCarro);
         $carro->update(['disponivel' => 0]);
 
         return response()->json($locacao, 201);
