@@ -17,10 +17,43 @@
                     <option
                       v-for="(item, key) in modelos.data"
                       :key="key"
-                      :value="item[0]"
+                      :value="item['nome']"
                     >
                       {{ item["nome"] }}
                     </option>
+                  </select>
+                </input-container-component>
+              </div>
+
+              <div class="col mb-3">
+                <input-container-component
+                  titulo="Marca do modelo"
+                  id="inputMarca"
+                  id-help="nomeHelp"
+                  texto-ajuda="(Opcional) selecione a marca do Modelo"
+                >
+                  <select class="form-select" v-model="busca.marca_id">
+                    <option
+                      v-for="(item, key) in marcas.data"
+                      :key="key"
+                      :value="item[0]"
+                    >
+                      {{ item[1] }}
+                    </option>
+                  </select>
+                </input-container-component>
+              </div>
+
+              <div class="col mb-3">
+                <input-container-component
+                  titulo="Possui ABS"
+                  id="inputABS"
+                  id-help="ABSHelp"
+                  texto-ajuda="(Opcional) selecione caso queira um modelo com ABS"
+                >
+                  <select class="form-select" v-model="busca.abs">
+                    <option value="1">Com ABS</option>
+                    <option value="0">Sem ABS</option>
                   </select>
                 </input-container-component>
               </div>
@@ -43,74 +76,19 @@
                 </input-container-component>
               </div>
 
-              <!-- <div class="col mb-3">
-                <input-container-component
-                  titulo="Número de portas"
-                  id="inputPortas"
-                  id-help="portasHelp"
-                  texto-ajuda="(Opcional) Informe o número de portas"
-                >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="inputPortas"
-                    aria-describedby="portasHelp"
-                    placeholder="Ex: 4"
-                    v-model="busca.numero_portas"
-                  />
-                </input-container-component>
-              </div>
-              <div class="col mb-3">
-                <input-container-component
-                  titulo="Número de Lugares"
-                  id="inputLugares"
-                  id-help="lugaresHelp"
-                  texto-ajuda="(Opcional) Informe o número de Lugares"
-                >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="inputLugares"
-                    aria-describedby="lugaresHelp"
-                    placeholder="Ex: 5"
-                    v-model="busca.lugares"
-                  />
-                </input-container-component>
-              </div>
               <div class="col mb-3">
                 <input-container-component
                   titulo="Possui Air Bag"
-                  id="inputAirBag"
+                  id="inputAirbag"
                   id-help="airbagHelp"
-                  texto-ajuda="(Opcional) Informe o número de air bag"
+                  texto-ajuda="(Opcional) selecione caso queira um modelo com Air Bag"
                 >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="inputAirBag"
-                    aria-describedby="airbagHelp"
-                    placeholder="Ex: "
-                    v-model="busca.air_bag"
-                  />
+                  <select class="form-select" v-model="busca.air_bag">
+                    <option value="1">Com Air Bag</option>
+                    <option value="0">Sem Air Bag</option>
+                  </select>
                 </input-container-component>
               </div>
-              <div class="col mb-3">
-                <input-container-component
-                  titulo="Número de portas"
-                  id="inputPortas"
-                  id-help="portasHelp"
-                  texto-ajuda="(Opcional) Informe o número de portas"
-                >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="inputPortas"
-                    aria-describedby="portasHelp"
-                    placeholder="Ex: 4"
-                    v-model="busca.abs"
-                  />
-                </input-container-component>
-              </div> -->
             </div>
           </template>
           <template v-slot:rodape>
@@ -628,6 +606,7 @@ export default {
         lugares: "",
         air_bag: "",
         abs: "",
+        marca_id: "",
       },
     };
   },
@@ -635,6 +614,7 @@ export default {
     limparFiltro() {
       this.busca.id = "";
       this.busca.nome = "";
+      this.busca.marca_id = "";
       this.busca.numero_portas = "";
       this.busca.lugares = "";
       this.busca.air_bag = "";
@@ -644,7 +624,6 @@ export default {
     },
     pesquisar() {
       let filtro = "";
-
       for (let chave in this.busca) {
         if (this.busca[chave]) {
           if (filtro != "") {
@@ -657,6 +636,7 @@ export default {
       if (filtro != "") {
         this.urlPaginacao = "page=1";
         this.urlFiltro = "&filtro=" + filtro;
+        console.log(this.urlFiltro);
       } else {
         this.urlFiltro = "";
       }
