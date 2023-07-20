@@ -9,9 +9,13 @@ Locadora Carro é um projeto de uma locadora fictícia de automóveis, onde é p
 - composer update
 - php artisan storage:link
 - php artisan migrate
-- php artisan bd:seed
+- php artisan db:seed
 - php artisan jwt:secret
 - npm install && npm run dev
 - php artisan serve
 
 > Projeto sendo melhorado constantimente
+
+- validar e-mail ao registrar
+- feedback quando não for encontrado nada pelo filtro de pesquisa
+- Adicionar filtro de placa no cadastro de carro

@@ -330,7 +330,7 @@ export default {
             filtro += ";";
           }
 
-          filtro += chave + ":like:" + this.busca[chave];
+          filtro += chave + ":like:" + this.busca[chave] + "%";
         }
       }
       if (filtro != "") {

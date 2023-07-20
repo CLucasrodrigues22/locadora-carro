@@ -8,22 +8,37 @@
             <div class="row">
               <div class="col mb-3">
                 <input-container-component
-                  titulo="ID"
-                  id="inputId"
-                  id-help="idHelp"
-                  texto-ajuda="(Opcional) Informe o ID do Carro"
+                  titulo="Placa do Carro"
+                  id="inputPlaca"
+                  id-help="placaHelp"
+                  texto-ajuda="(Opcional) selecione a placa do carro"
                 >
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="inputId"
-                    aria-describedby="idHelp"
-                    placeholder="ID"
-                    v-model="busca.id"
-                  />
+                  <select class="form-select" v-model="busca.placa">
+                    <option
+                      v-for="(item, key) in carros.data"
+                      :key="key"
+                      :value="item['id']"
+                    >
+                      {{ item["placa"] }}
+                    </option>
+                  </select>
                 </input-container-component>
               </div>
+
               <div class="col mb-3">
+                <input-container-component
+                  titulo="Disponibilidade"
+                  id="inputABS"
+                  id-help="ABSHelp"
+                  texto-ajuda="(Opcional) Disponibilidade do Carro"
+                >
+                  <select class="form-select" v-model="busca.disponivel">
+                    <option value="1">Disponivel</option>
+                    <option value="0">Indisponível</option>
+                  </select>
+                </input-container-component>
+              </div>
+              <!-- <div class="col mb-3">
                 <input-container-component
                   titulo="Placa do Carro"
                   id="inputPlaca"
@@ -39,7 +54,7 @@
                     v-model="busca.placa"
                   />
                 </input-container-component>
-              </div>
+              </div> -->
             </div>
           </template>
 
@@ -166,9 +181,22 @@
                     <div class="ms-2 me-auto">
                       <div class="fw-bold">ABS</div>
                       {{
-                        $store.state.item.abs != 1
+                        $store.state.item.modelo?.abs != 1
                           ? "Não possui ABS"
                           : "Possui ABS"
+                      }}
+                    </div>
+                  </li>
+
+                  <li
+                    class="list-group-item d-flex justify-content-between align-items-start"
+                  >
+                    <div class="ms-2 me-auto">
+                      <div class="fw-bold">Air Bag</div>
+                      {{
+                        $store.state.item.modelo?.air_bag != 1
+                          ? "Não possui Air Bag"
+                          : "Possui Air Bag"
                       }}
                     </div>
                   </li>
@@ -455,11 +483,13 @@ export default {
       modelos: {
         data: [],
       },
-      busca: { id: "", placa: "" },
+      busca: { id: "", placa: "", disponivel: "" },
     };
   },
   methods: {
     limparFiltro() {
+      this.placa = "";
+      this.disponivel = "";
       this.urlFiltro = "";
       this.carregarCarros();
     },
@@ -472,7 +502,7 @@ export default {
             filtro += ";";
           }
 
-          filtro += chave + ":like:" + this.busca[chave];
+          filtro += chave + ":like:" + this.busca[chave] + "%";
         }
       }
       if (filtro != "") {
