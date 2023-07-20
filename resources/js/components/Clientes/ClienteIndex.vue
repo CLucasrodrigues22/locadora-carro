@@ -340,6 +340,7 @@ export default {
         this.urlFiltro = "";
       }
       this.carregarClientes();
+      console.log();
     },
     paginacao(li) {
       if (li.url) {

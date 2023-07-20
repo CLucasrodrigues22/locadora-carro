@@ -99,6 +99,11 @@
         </tr>
       </tbody>
     </table>
+    <div id="feedbackSemDados" v-if="dados.length === 0">
+      <span class="feedbackSemDados">
+        Não foram encontrados dados em nossa base.
+      </span>
+    </div>
   </div>
 </template>
 
