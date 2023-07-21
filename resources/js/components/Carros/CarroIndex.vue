@@ -38,23 +38,6 @@
                   </select>
                 </input-container-component>
               </div>
-              <!-- <div class="col mb-3">
-                <input-container-component
-                  titulo="Placa do Carro"
-                  id="inputPlaca"
-                  id-help="placaHelp"
-                  texto-ajuda="(Opcional) Informe a placa do Carro"
-                >
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="inputPlaca"
-                    aria-describedby="placaHelp"
-                    placeholder="AAA-0000"
-                    v-model="busca.placa"
-                  />
-                </input-container-component>
-              </div> -->
             </div>
           </template>
 

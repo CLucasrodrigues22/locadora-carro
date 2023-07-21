@@ -16,6 +16,4 @@ Locadora Carro é um projeto de uma locadora fictícia de automóveis, onde é p
 
 > Projeto sendo melhorado constantimente
 
-- validar e-mail ao registrar
-- feedback quando não for encontrado nada pelo filtro de pesquisa
 - Adicionar filtro de placa no cadastro de carro
