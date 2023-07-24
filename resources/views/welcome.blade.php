@@ -59,10 +59,10 @@
                     @auth
                         <a href="{{ url('/home') }}" class="link-danger">Inicio</a>
                     @else
-                        <a href="{{ route('login') }}" class="m-2" style="color: #fff">Log in</a>
+                        <a href="{{ route('login') }}" class="m-2" style="color: #fff">Entrar</a>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="m-2" style="color: #fff">Register</a>
+                            <a href="{{ route('register') }}" class="m-2" style="color: #fff">Registrar-se</a>
                         @endif
                     @endauth
                 </div>
