@@ -451,7 +451,7 @@ export default {
   },
   data() {
     return {
-      urlBase: "http://127.0.0.1:8000/api/v1/carro",
+      urlBase: "http://localhost/api/v1/carro",
       urlPaginacao: "",
       urlFiltro: "",
       carroModelo: "",
@@ -514,7 +514,7 @@ export default {
         });
     },
     carregarDadosModelos() {
-      let urlModelos = "http://127.0.0.1:8000/api/v1/modelo?all";
+      let urlModelos = "http://localhost/api/v1/modelo?all";
       axios
         .get(urlModelos)
         .then((response) => {

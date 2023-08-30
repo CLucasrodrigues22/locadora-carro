@@ -22,38 +22,38 @@ axios.interceptors.request.use(
         let token = document.cookie.split(';').find(indice => {
             return indice.includes('token=');
         })
-            // separando o atributo token pelo "=" para resgatar apenas o valor do mesmo
-            token = token.split('=')[1];
-            token = 'Bearer ' + token;
+        // separando o atributo token pelo "=" para resgatar apenas o valor do mesmo
+        token = token.split('=')[1];
+        token = 'Bearer ' + token;
 
-            // definir para todas as requisições os parâmetros de accept e Authorization
-            config.headers.Authorization = token
+        // definir para todas as requisições os parâmetros de accept e Authorization
+        config.headers.Authorization = token
 
-            return config
-        },
-            error => {
-                console.log('Erro na requisição: ', error)
-                return Promise.reject(error)
-            }
-        )
+        return config
+    },
+    error => {
+        console.log('Erro na requisição: ', error)
+        return Promise.reject(error)
+    }
+)
 
-        // interceptar os responses da aplicação
-        axios.interceptors.response.use(
-            response => {
-                return response
-            },
-            error => {
-                if(error.response.status == 401 && error.response.data.message == 'Token has expired') {
-                    // requisitando um refresh automatico do token
-                    axios.post('http://127.0.0.1:8000/api/refresh')
-                    .then(response => {
-                        document.cookie = 'token='+response.data.token;
-                        window.location.reload()
-                    });
-                }
-                return Promise.reject(error)
-            }
-        )
+// interceptar os responses da aplicação
+axios.interceptors.response.use(
+    response => {
+        return response
+    },
+    error => {
+        if (error.response.status == 401 && error.response.data.message == 'Token has expired') {
+            // requisitando um refresh automatico do token
+            axios.post('http://localhost/api/refresh')
+                .then(response => {
+                    document.cookie = 'token=' + response.data.token;
+                    window.location.reload()
+                });
+        }
+        return Promise.reject(error)
+    }
+)
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

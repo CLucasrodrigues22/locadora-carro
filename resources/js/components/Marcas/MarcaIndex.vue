@@ -332,7 +332,7 @@
 export default {
   data() {
     return {
-      urlBase: "http://127.0.0.1:8000/api/v1/marca",
+      urlBase: "http://localhost/api/v1/marca",
       urlPaginacao: "",
       urlFiltro: "",
       novaMarca: "",

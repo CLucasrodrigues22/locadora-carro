@@ -306,7 +306,7 @@
 export default {
   data() {
     return {
-      urlBase: "http://127.0.0.1:8000/api/v1/cliente",
+      urlBase: "http://localhost/api/v1/cliente",
       urlPaginacao: "",
       urlFiltro: "",
       novoCliente: "",

@@ -1,4 +1,4 @@
-FROM php:8.2-cli
+FROM php:8.2-fpm
 
 COPY composer.lock composer.json /var/www/
 
@@ -47,5 +47,7 @@ RUN chown -R www-data:www-data /var/www
 # change current user to www
 USER www 
 
+# Expõe a porta para o servidor de desenvolvimento do Vue.js
 EXPOSE 9000
-CMD ['php-fpm']
+
+CMD ["php-fpm"]

@@ -444,9 +444,9 @@ export default {
   },
   data() {
     return {
-      urlBase: "http://127.0.0.1:8000/api/v1/locacao",
-      urlCarros: "http://127.0.0.1:8000/api/v1/carro",
-      urlClientes: "http://127.0.0.1:8000/api/v1/cliente",
+      urlBase: "http://localhost/api/v1/locacao",
+      urlCarros: "http://localhost/api/v1/carro",
+      urlClientes: "http://localhost/api/v1/cliente",
       urlPaginacao: "",
       urlFiltro: "",
       placaCarro: "",
@@ -640,7 +640,7 @@ export default {
       formData.append("disponivel", 1);
 
       let url =
-        "http://127.0.0.1:8000/api/v1/carro/" + this.$store.state.item.carro_id;
+        "http://localhost/api/v1/carro/" + this.$store.state.item.carro_id;
       axios
         .post(url, formData)
         .then((response) => {
@@ -731,8 +731,7 @@ export default {
         formData.append("km", this.kmVeiculoFinal);
 
         let url =
-          "http://127.0.0.1:8000/api/v1/carro/" +
-          this.$store.state.item.carro_id;
+          "http://localhost/api/v1/carro/" + this.$store.state.item.carro_id;
         axios
           .post(url, formData)
           .then((response) => {

@@ -581,7 +581,7 @@ export default {
   },
   data() {
     return {
-      urlBase: "http://127.0.0.1:8000/api/v1/modelo",
+      urlBase: "http://localhost/api/v1/modelo",
       urlPaginacao: "",
       urlFiltro: "",
       marcaModelo: "",
@@ -660,7 +660,7 @@ export default {
         });
     },
     carregarDadosMarcas() {
-      let urlMarca = "http://127.0.0.1:8000/api/v1/marca?all";
+      let urlMarca = "http://localhost/api/v1/marca?all";
       axios
         .get(urlMarca)
         .then((response) => {
