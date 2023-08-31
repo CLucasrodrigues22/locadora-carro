@@ -6,10 +6,9 @@
 @import url(animate.min.css);
 @import url(normalize.css);
 @import url(icomoon.css);
-@import url(css/font-awesome.min.css);
+@import url(font-awesome.min.css);
 @import url(meanmenu.css);
 @import url(owl.carousel.min.css);
-@import url(swiper.min.css);
 @import url(slick.css);
 @import url(jquery.fancybox.min.css);
 @import url(jquery-ui.css);
@@ -101,7 +100,7 @@ h4 a,
 h5 a,
 h6 a {
     color: #212121;
-    text-decoration: none!important;
+    text-decoration: none !important;
     opacity: 1
 }
 
@@ -146,7 +145,7 @@ img {
     height: auto;
 }
 
- :focus {
+:focus {
     outline: 0;
 }
 
@@ -223,8 +222,7 @@ button {
 .header_bg {
     width: 100%;
     float: left;
-    background: #1d1d1d
-    height: auto;
+    background: #1d1d1d height: auto;
     background-size: 100%;
 }
 
@@ -256,7 +254,7 @@ button {
     float: right;
 }
 
-.call_text_main{
+.call_text_main {
     width: 100%;
     float: left;
     background-color: #fe5b29;
@@ -264,7 +262,7 @@ button {
     padding: 10px 0px;
 }
 
-.call_taital{
+.call_taital {
     width: 100%;
     display: flex;
 }
@@ -482,14 +480,15 @@ button {
     float: left;
 }
 
-.search_taital{
+.search_taital {
     width: 100%;
     float: left;
     font-size: 40px;
     color: #fefefd;
     font-weight: bold;
 }
-.search_text{
+
+.search_text {
     width: 100%;
     float: left;
     font-size: 16px;
@@ -596,6 +595,7 @@ span.current {
     padding: 20px 20px;
     box-shadow: 0px 0px 6px 6px #f4f3f2;
 }
+
 .gallery_box:hover {
     box-shadow: 0px 0px 0px 0px;
 }
@@ -679,7 +679,7 @@ span.current {
 
 /* choose section start */
 
-.choose_section{
+.choose_section {
     width: 100%;
     float: left;
     background-color: #363636;
@@ -687,7 +687,7 @@ span.current {
     padding: 40px 0px;
 }
 
-.choose_taital{
+.choose_taital {
     width: 100%;
     float: left;
     font-size: 40px;
@@ -696,7 +696,7 @@ span.current {
     font-weight: bold;
 }
 
-.choose_section_2{
+.choose_section_2 {
     width: 100%;
     float: left;
     padding-top: 40px;
@@ -708,7 +708,7 @@ span.current {
     min-height: 50px;
 }
 
-.safety_text{
+.safety_text {
     width: 100%;
     float: left;
     color: #fefefd;
@@ -774,7 +774,7 @@ span.current {
     color: #1d1f1e;
     font-weight: bold;
     text-align: center;
-    padding: 0px 0px 20px 0px; 
+    padding: 0px 0px 20px 0px;
 }
 
 .client_text {
@@ -786,7 +786,7 @@ span.current {
     text-align: center;
 }
 
-.quick_icon{
+.quick_icon {
     width: 100%;
     float: left;
     text-align: center;
@@ -944,13 +944,13 @@ textarea#comment.massage-bt::placeholder {
     padding: 50px 0px;
 }
 
-.footeer_logo{
+.footeer_logo {
     width: 100%;
     float: left;
     text-align: center;
 }
 
-.footer_section_2{
+.footer_section_2 {
     width: 100%;
     float: left;
     padding-top: 50px;

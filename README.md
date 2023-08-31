@@ -6,13 +6,43 @@ Locadora Carro é um projeto de uma locadora fictícia de automóveis, onde é p
 
 > Configurações:
 
-- composer update
-- php artisan storage:link
-- php artisan migrate
-- php artisan db:seed
-- php artisan jwt:secret
-- npm install && npm run dev
-- php artisan serve
+# Instalar dependencias via composer
+`composer install`
+
+
+# Criando .env (Após criar, adicione os parametros do banco)
+`cp .env.example .env`
+
+# baixar as versões mais recentes de todos os pacotes, classes e bibliotecas que existem no repositório, recarregar e atualizar o arquivo de autoload
+`composer dump-autoload`
+
+# Instalar dependencias front
+`npm i`
+
+# Subindo containers docker
+`docker compose up -d`
+
+# Identifique o CONTAINER ID da locadora-carro-api-app
+`docker ps`
+
+# Abrir um terminal no container em execução
+`docker exec -it (CONTAINER ID) bash`
+
+
+# Executa migrações do Laravel
+RUN php artisan migrate
+
+# Gera chave JWT
+RUN php artisan jwt:secret
+
+# Cria link para storage
+RUN php artisan storage:link
+
+# Executa seeders do banco de dados
+RUN php artisan db:seed
+
+# Gerar uma key para api
+`php artisan key:generate`
 
 > Projeto sendo melhorado constantimente
 
