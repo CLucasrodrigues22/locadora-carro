@@ -88,9 +88,10 @@ export default {
   },
   methods: {
     login(e) {
-      let url = "http://localhost/api/login";
+      let url = "http://54.80.99.121/api/login";
       let cfg = {
         method: "post",
+        
         body: new URLSearchParams({
           email: this.email,
           password: this.password,
