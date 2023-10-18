@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     login(e) {
-      let url = "http://54.80.99.121/api/login";
+      let url = "http://localhost/api/login";
       let cfg = {
         method: "post",
         
